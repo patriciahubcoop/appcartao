@@ -1,42 +1,43 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
-//import { createPageUrl } from "@/utils";
-import { Home, Receipt, CreditCard, Wallet, MoreHorizontal } from "lucide-react";
+import { Home, Receipt, CreditCard, MoreHorizontal } from "lucide-react";
 
 export default function Layout({ children, currentPageName }) {
   const location = useLocation();
   
   const navigationItems = [
- { name: "Home", path: "/", icon: Home, label: "Início" },
- { name: "Transactions", path: "/transactions", icon: Receipt, label: "Extrato" },
- { name: "Cards", path: "/cards", icon: CreditCard, label: "Cartões" },
- { name: "More", path: "/more", icon: MoreHorizontal, label: "Menu" }
- ];
+    { name: "Home", path: "/", icon: Home, label: "Início" },
+    { name: "Transactions", path: "/transactions", icon: Receipt, label: "Extrato" },
+    { name: "Cards", path: "/cards", icon: CreditCard, label: "Cartões" },
+    { name: "More", path: "/more", icon: MoreHorizontal, label: "Menu" }
+  ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 pb-20">
+    <div className="min-h-screen bg-[#f5f9f4] pb-20">
       <style>{`
         :root {
-          --primary: #4A9B9E;
-          --primary-light: #5B9A9E;
-          --primary-dark: #3D8385;
-          --text-dark: #2D3748;
-          --text-light: #718096;
+          /* Paleta aproximada CrediSIS */
+          --primary: #00953A; /* verde principal */
+          --primary-light: #00B54A;
+          --primary-dark: #00752E;
+          --accent-yellow: #C6FF4A; /* verde-limão para destaques */
+          --text-dark: #1F2933;
+          --text-light: #6B7280;
         }
         
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap');
         
         body {
-          font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+          font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
         }
       `}</style>
-      
+
       <main className="min-h-screen">
         {children}
       </main>
 
       {/* Bottom Navigation */}
-      <nav className="fixed bottom-0 left-0 right-0 bg-white z-50 safe-area-bottom shadow-lg" role="navigation" aria-label="Menu de navegação principal">
+      <nav className="fixed bottom-0 left-0 right-0 bg-white z-50 safe-area-bottom shadow-[0_-4px_12px_rgba(0,0,0,0.08)]" role="navigation" aria-label="Menu de navegação principal">
         <div className="flex items-center justify-around h-16 max-w-screen-xl mx-auto px-2">
           {navigationItems.map((item) => {
             const Icon = item.icon;
@@ -47,7 +48,7 @@ export default function Layout({ children, currentPageName }) {
                 key={item.name}
                 to={item.path}
                 className={`flex flex-col items-center justify-center flex-1 h-full transition-colors duration-200 ${
-                  isActive ? 'text-[#4A9B9E]' : 'text-slate-400'
+                  isActive ? 'text-[color:var(--primary)]' : 'text-slate-400'
                 }`}
                 aria-label={`${item.label}${isActive ? ' - Página atual' : ''}`}
                 aria-current={isActive ? 'page' : undefined}

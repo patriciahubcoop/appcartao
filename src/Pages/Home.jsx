@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
+import logoCredisis from "../assets/credisis-logo.png";
 
 import {
   Eye,
@@ -88,10 +89,10 @@ export default function HomePage() {
   }, [cards, selectedCard]);
 
   const quickActions = [
-    { icon: QrCode, label: "Pix com cartão", path: "/pix-card", color: "#4A9B9E" },
-    { icon: CreditCard, label: "Consultar Limites", path: "/limits", color: "#4A9B9E" },
-    { icon: Receipt, label: "Pagar", path: "/invoices", color: "#4A9B9E" },
-    { icon: Smartphone, label: "Recarga", path: null, color: "#4A9B9E" },
+    { icon: QrCode, label: "Pix com cartão", path: "/pix-card" },
+    { icon: CreditCard, label: "Consultar Limites", path: "/limits" },
+    { icon: Receipt, label: "Pagar", path: "/invoices" },
+    { icon: Smartphone, label: "Recarga", path: null },
   ];
 
   const menuItems = [
@@ -114,6 +115,16 @@ export default function HomePage() {
             <Skeleton key={i} className="h-20 rounded-xl" />
           ))}
         </div>
+
+        {/* CTAs principais, inspirados no site */}
+        <div className="mt-6 flex gap-3">
+          <button className="flex-1 h-11 rounded-full bg-[color:var(--accent-yellow,#C6FF4A)] text-[#014726] font-semibold text-sm shadow-md">
+            Abra sua conta
+          </button>
+          <button className="flex-1 h-11 rounded-full border border-white/70 text-white font-semibold text-sm bg-white/5">
+            Acesse sua conta
+          </button>
+        </div>
       </div>
     );
   }
@@ -122,16 +133,17 @@ export default function HomePage() {
   const totalLimit = selectedCard?.total_limit || 15000.0;
 
   return (
-    <div className="min-h-screen bg-[#4A9B9E]">
+    <div className="min-h-screen bg-gradient-to-b from-[#014726] via-[#026c35] to-[#059641]">
       {/* Header with Balance */}
-      <div className="px-6 pt-16 pb-8">
+      <div className="px-6 pt-16 pb-8 relative">
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
-              <div className="w-6 h-6 rounded-full bg-white/40" />
+            <div className="w-10 h-10 rounded-full bg-[color:var(--accent-yellow,#C6FF4A)]/90 flex items-center justify-center">
+              <div className="w-6 h-6 rounded-full bg-white/90" />
             </div>
-            <span className="text-white font-medium">Conta</span>
+            <span className="text-[color:var(--accent-yellow,#C6FF4A)] font-semibold tracking-wide">Olá, João!</span>
           </div>
+
           <button
             onClick={() => setShowBalance(!showBalance)}
             className="text-white p-2"
@@ -141,9 +153,16 @@ export default function HomePage() {
           </button>
         </div>
 
+        {/* Logo posicionado na faixa verde, à direita */}
+        <img
+          src={logoCredisis}
+          alt="CrediSIS"
+          className="hidden sm:block h-28 w-auto absolute right-24 top-10"
+        />
+
         <div className="mb-2">
-          <p className="text-white/80 text-sm mb-1">Saldo disponível</p>
-          <p className="text-white text-3xl font-medium">
+          <p className="text-[color:var(--accent-yellow,#C6FF4A)] text-sm mb-1 font-medium">Saldo disponível</p>
+          <p className="text-white text-3xl font-semibold">
             {showBalance ? `R$ ${currentBalance.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}` : 'R$ ••••••'}
           </p>
         </div>
@@ -153,19 +172,19 @@ export default function HomePage() {
             action.path ? (
               <Link key={idx} to={action.path} className="flex-shrink-0">
                 <div className="flex flex-col items-center gap-2">
-                  <div className="w-16 h-16 rounded-full bg-white/20 flex items-center justify-center backdrop-blur-sm">
-                    <action.icon className="w-7 h-7 text-white" aria-hidden="true" />
+                  <div className="w-16 h-16 rounded-2xl bg-[color:var(--accent-yellow,#C6FF4A)] flex items-center justify-center shadow-md">
+                    <action.icon className="w-7 h-7 text-[#014726]" aria-hidden="true" />
                   </div>
-                  <span className="text-white text-xs font-medium">{action.label}</span>
+                  <span className="text-white text-xs font-semibold">{action.label}</span>
                 </div>
               </Link>
             ) : (
               <button key={idx} className="flex-shrink-0">
                 <div className="flex flex-col items-center gap-2">
-                  <div className="w-16 h-16 rounded-full bg-white/20 flex items-center justify-center backdrop-blur-sm">
-                    <action.icon className="w-7 h-7 text-white" aria-hidden="true" />
+                  <div className="w-16 h-16 rounded-2xl bg-[color:var(--accent-yellow,#C6FF4A)] flex items-center justify-center shadow-md">
+                    <action.icon className="w-7 h-7 text-[#014726]" aria-hidden="true" />
                   </div>
-                  <span className="text-white text-xs font-medium">{action.label}</span>
+                  <span className="text-white text-xs font-semibold">{action.label}</span>
                 </div>
               </button>
             )
@@ -174,25 +193,25 @@ export default function HomePage() {
       </div>
 
       {/* Card Section */}
-      <div className="bg-white rounded-t-3xl px-6 py-6 min-h-screen">
+      <div className="bg-white rounded-t-3xl px-6 py-6 min-h-screen shadow-[0_-8px_24px_rgba(0,0,0,0.15)]">
         <Link to="/cards">
           <Card className="border-none shadow-sm hover:shadow-md transition-shadow mb-4">
             <CardContent className="p-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center">
-                    <CreditCard className="w-5 h-5 text-[#4A9B9E]" aria-hidden="true" />
+                    <CreditCard className="w-5 h-5 text-[#1F2933]" aria-hidden="true" />
                   </div>
                   <div>
-                    <p className="text-[#2D3748] font-semibold">Cartão de crédito</p>
-                    <p className="text-[#718096] text-sm">Fatura atual</p>
+                    <p className="text-[#1F2933] font-semibold">Cartão de crédito</p>
+                    <p className="text-[#6B7280] text-sm">Fatura atual</p>
                   </div>
                 </div>
                 <ChevronRight className="w-5 h-5 text-[#718096]" aria-hidden="true" />
               </div>
               <div className="mt-4 pt-4 border-t border-slate-100">
-                <p className="text-[#718096] text-xs mb-1">Fatura atual</p>
-                <p className="text-[#2D3748] text-xl font-bold">
+                <p className="text-[#6B7280] text-xs mb-1">Fatura atual</p>
+                <p className="text-[#1F2933] text-xl font-bold">
                   {showBalance ? `R$ ${selectedCard?.current_invoice_amount?.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}` : 'R$ ••••••'}
                 </p>
                 <p className="text-[#718096] text-sm mt-1">
@@ -210,8 +229,8 @@ export default function HomePage() {
               <Link key={idx} to={item.path}>
                 <button className="w-full flex items-center justify-between p-4 hover:bg-slate-50 rounded-lg transition-colors">
                   <div className="flex items-center gap-3">
-                    <item.icon className="w-5 h-5 text-[#2D3748]" aria-hidden="true" />
-                    <span className="text-[#2D3748] font-medium">{item.label}</span>
+                    <item.icon className="w-5 h-5 text-[#1F2933]" aria-hidden="true" />
+                    <span className="text-[#1F2933] font-medium">{item.label}</span>
                   </div>
                   <ChevronRight className="w-5 h-5 text-[#718096]" aria-hidden="true" />
                 </button>
@@ -219,8 +238,8 @@ export default function HomePage() {
             ) : (
               <button key={idx} className="w-full flex items-center justify-between p-4 hover:bg-slate-50 rounded-lg transition-colors">
                 <div className="flex items-center gap-3">
-                  <item.icon className="w-5 h-5 text-[#2D3748]" aria-hidden="true" />
-                  <span className="text-[#2D3748] font-medium">{item.label}</span>
+                  <item.icon className="w-5 h-5 text-[#1F2933]" aria-hidden="true" />
+                  <span className="text-[#1F2933] font-medium">{item.label}</span>
                 </div>
                 <ChevronRight className="w-5 h-5 text-[#718096]" aria-hidden="true" />
               </button>
@@ -230,9 +249,9 @@ export default function HomePage() {
 
         {/* Discover More */}
         <div className="mt-8">
-          <h3 className="text-[#2D3748] font-bold mb-4">Descubra mais</h3>
+          <h3 className="text-[#1F2933] font-bold mb-4">Descubra mais</h3>
 
-          <Card className="border-none shadow-sm mb-3 bg-gradient-to-br from-purple-500 to-purple-600">
+          <Card className="border-none shadow-sm mb-3 bg-gradient-to-br from-[#6AD34B] to-[#00953A]">
             <CardContent className="p-4">
               <div className="flex items-center justify-between">
                 <div className="flex-1">
@@ -245,7 +264,7 @@ export default function HomePage() {
           </Card>
 
           <Link to="/dollar-quote">
-            <Card className="border-none shadow-sm bg-gradient-to-br from-green-500 to-emerald-600">
+            <Card className="border-none shadow-sm bg-gradient-to-br from-[#A6FF4E] to-[#00953A]">
               <CardContent className="p-4">
                 <div className="flex items-center justify-between">
                   <div className="flex-1">

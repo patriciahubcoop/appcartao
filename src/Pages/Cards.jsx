@@ -96,9 +96,9 @@ export default function CardsPage() {
   return (
     <div className="min-h-screen bg-slate-50">
       {/* Header */}
-      <header className="bg-gradient-to-br from-[#4A9B9E] to-[#3D8385] px-4 pt-12 pb-6 rounded-b-3xl">
-        <h1 className="text-white text-2xl font-bold mb-2">Meus Cartões</h1>
-        <p className="text-white/80 text-sm">Gerencie seus cartões físicos e virtuais</p>
+      <header className="bg-gradient-to-br from-[#014726] via-[#026c35] to-[#059641] px-4 pt-12 pb-6 rounded-b-3xl">
+        <h1 className="text-[color:var(--accent-yellow,#C6FF4A)] text-2xl font-extrabold mb-1">Meus Cartões</h1>
+        <p className="text-white/90 text-sm">Gerencie seus cartões físicos e virtuais</p>
       </header>
 
       <div className="px-4 py-6">

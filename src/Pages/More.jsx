@@ -67,8 +67,8 @@ export default function MorePage() {
   return (
     <div className="min-h-screen bg-slate-50">
       {/* Header */}
-      <div className="bg-[#4A9B9E] px-6 pt-12 pb-8">
-        <h1 className="text-white text-2xl font-bold">Menu</h1>
+      <div className="bg-gradient-to-r from-[#014726] via-[#026c35] to-[#059641] px-6 pt-12 pb-8">
+        <h1 className="text-[color:var(--accent-yellow,#C6FF4A)] text-2xl font-extrabold">Menu</h1>
       </div>
 
       <div className="bg-white px-6 py-6 min-h-screen space-y-1">
