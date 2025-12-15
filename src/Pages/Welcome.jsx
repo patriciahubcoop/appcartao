@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { createPageUrl } from "@/utils";
 import { Loader2 } from "lucide-react";
 
 export default function WelcomePage() {
@@ -9,7 +8,7 @@ export default function WelcomePage() {
   useEffect(() => {
     // Redirecionar automaticamente após breve delay
     const timer = setTimeout(() => {
-      navigate(createPageUrl("Home"));
+      navigate("/");
     }, 1000);
 
     return () => clearTimeout(timer);
@@ -19,7 +18,7 @@ export default function WelcomePage() {
       <div className="text-center" role="status" aria-live="polite">
         <div className="bg-white/10 backdrop-blur-md rounded-3xl p-8 mb-6 max-w-sm mx-auto">
           <img 
-            src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6914c7302de7f8bfbf9ee59d/81eaf58d8_image.png"
+            src="https://via.placeholder.com/400x200?text=Hubcoop"
             alt="Logo Hubcoop - Gestão de Cartões"
             className="w-full h-auto"
           />

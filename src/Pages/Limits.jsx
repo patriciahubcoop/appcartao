@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { base44 } from "@/api/base44Client";
+
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -43,26 +43,31 @@ export default function LimitsPage() {
   const { data: cards, isLoading } = useQuery({
     queryKey: ['cards'],
     queryFn: async () => {
-      try {
-        return await base44.entities.Card.list('-updated_date');
-      } catch (error) {
-        return [{
-          id: '1',
-          nickname: 'Cartão Principal',
-          card_number_last4: '4521',
-          total_limit: 15000.0,
-          available_limit: 8450.0,
-          status: 'active'
-        }];
-      }
+      // Mock local de cartões
+      return [{
+        id: '1',
+        nickname: 'Cartão Principal',
+        card_number_last4: '4521',
+        total_limit: 15000.0,
+        available_limit: 8450.0,
+        status: 'active'
+      }];
     },
     initialData: [],
   });
 
   const updateLimitMutation = useMutation({
     mutationFn: async ({ cardId, newLimit }) => {
-      return await base44.entities.Card.update(cardId, {
-        total_limit: parseFloat(newLimit)
+      // Simula atualização de limite sem chamada real de API
+      return new Promise((resolve) => {
+        setTimeout(
+          () =>
+            resolve({
+              id: cardId,
+              total_limit: parseFloat(newLimit),
+            }),
+          300
+        );
       });
     },
     onSuccess: () => {

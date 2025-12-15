@@ -1,0 +1,4 @@
+// Arquivo legado sem extensão transformado em simples reexport
+// para o componente React definido em TravelNoticeDialog.jsx
+
+export { default } from "./TravelNoticeDialog.jsx";

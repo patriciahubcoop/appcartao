@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { base44 } from "@/api/base44Client";
+
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -23,7 +23,7 @@ import {
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { toast } from "sonner";
-import TravelNoticeDialog from "../components/cards/TravelNoticeDialog";
+import TravelNoticeDialog from "../Componentes/cards/TravelNoticeDialog";
 
 export default function CardsPage() {
   const [showCardDetails, setShowCardDetails] = useState({});
@@ -36,21 +36,18 @@ export default function CardsPage() {
   const { data: cards, isLoading: cardsLoading } = useQuery({
     queryKey: ['cards'],
     queryFn: async () => {
-      try {
-        return await base44.entities.Card.list('-updated_date');
-      } catch (error) {
-        return [{
-          id: '1',
-          nickname: 'Cartão Principal',
-          holder_name: 'João Silva Santos',
-          card_type: 'credit',
-          card_number_last4: '4521',
-          total_limit: 15000.0,
-          available_limit: 8450.0,
-          status: 'active',
-          is_blocked: false
-        }];
-      }
+      // Mock local de cartões
+      return [{
+        id: '1',
+        nickname: 'Cartão Principal',
+        holder_name: 'João Silva Santos',
+        card_type: 'credit',
+        card_number_last4: '4521',
+        total_limit: 15000.0,
+        available_limit: 8450.0,
+        status: 'active',
+        is_blocked: false
+      }];
     },
     initialData: [],
   });
@@ -58,14 +55,11 @@ export default function CardsPage() {
   const { data: requests, isLoading: requestsLoading } = useQuery({
     queryKey: ['cardRequests'],
     queryFn: async () => {
-      try {
-        return await base44.entities.CardRequest.list('-created_date');
-      } catch (error) {
-        return [
-          { id: '1', request_type: 'new_card', card_type: 'credit', status: 'pending', created_date: '2025-11-12T10:00:00' },
-          { id: '2', request_type: 'second_copy', card_type: 'credit', status: 'approved', created_date: '2025-11-08T15:30:00' }
-        ];
-      }
+      // Mock local de solicitações
+      return [
+        { id: '1', request_type: 'new_card', card_type: 'credit', status: 'pending', created_date: '2025-11-12T10:00:00' },
+        { id: '2', request_type: 'second_copy', card_type: 'credit', status: 'approved', created_date: '2025-11-08T15:30:00' }
+      ];
     },
     initialData: [],
   });

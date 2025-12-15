@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { base44 } from "@/api/base44Client";
+
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -72,31 +72,26 @@ export default function TransactionsPage() {
   const { data: transactions, isLoading } = useQuery({
     queryKey: ['transactions'],
     queryFn: async () => {
-      try {
-        return await base44.entities.Transaction.list('-transaction_date');
-      } catch (error) {
-        // Return mock data
-        return [
-          { id: '1', merchant_name: 'Supermercado Bom Preço', category: 'alimentacao', amount: 458.9, transaction_date: '2025-11-10T14:30:00', transaction_type: 'credit', installments: 1, status: 'completed' },
-          { id: '2', merchant_name: 'Posto Shell', category: 'combustivel', amount: 250.0, transaction_date: '2025-11-09T08:15:00', transaction_type: 'credit', installments: 1, status: 'completed' },
-          { id: '3', merchant_name: 'Amazon Brasil', category: 'tecnologia', amount: 1299.9, transaction_date: '2025-11-08T16:45:00', transaction_type: 'installment', installments: 6, current_installment: 1, status: 'completed' },
-          { id: '4', merchant_name: 'Farmácia Saúde Total', category: 'saude', amount: 156.5, transaction_date: '2025-11-07T11:20:00', transaction_type: 'credit', installments: 1, status: 'completed' },
-          { id: '5', merchant_name: 'Netflix', category: 'lazer', amount: 55.9, transaction_date: '2025-11-05T00:01:00', transaction_type: 'credit', installments: 1, status: 'completed' }
-        ];
-      }
+      // Mock local de transações
+      return [
+        { id: '1', merchant_name: 'Supermercado Bom Preço', category: 'alimentacao', amount: 458.9, transaction_date: '2025-11-10T14:30:00', transaction_type: 'credit', installments: 1, status: 'completed' },
+        { id: '2', merchant_name: 'Posto Shell', category: 'combustivel', amount: 250.0, transaction_date: '2025-11-09T08:15:00', transaction_type: 'credit', installments: 1, status: 'completed' },
+        { id: '3', merchant_name: 'Amazon Brasil', category: 'tecnologia', amount: 1299.9, transaction_date: '2025-11-08T16:45:00', transaction_type: 'installment', installments: 6, current_installment: 1, status: 'completed' },
+        { id: '4', merchant_name: 'Farmácia Saúde Total', category: 'saude', amount: 156.5, transaction_date: '2025-11-07T11:20:00', transaction_type: 'credit', installments: 1, status: 'completed' },
+        { id: '5', merchant_name: 'Netflix', category: 'lazer', amount: 55.9, transaction_date: '2025-11-05T00:01:00', transaction_type: 'credit', installments: 1, status: 'completed' }
+      ];
     },
+
     initialData: [],
   });
 
   const { data: cards } = useQuery({
     queryKey: ['cards'],
     queryFn: async () => {
-      try {
-        return await base44.entities.Card.list();
-      } catch (error) {
-        return [];
-      }
+      // Mock local de cartões (não usado diretamente na UI por enquanto)
+      return [];
     },
+
     initialData: [],
   });
 

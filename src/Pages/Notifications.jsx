@@ -1,5 +1,4 @@
 import React from "react";
-import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -32,17 +31,13 @@ export default function NotificationsPage() {
   const { data: notifications, isLoading } = useQuery({
     queryKey: ['notifications'],
     queryFn: async () => {
-      try {
-        return await base44.entities.Notification.list('-created_date');
-      } catch (error) {
-        // Return mock data
-        return [
-          { id: '1', title: 'Nova transação aprovada', message: 'Compra no valor de R$ 458,90 aprovada no Supermercado Bom Preço', type: 'transaction', is_read: false, priority: 'medium', created_date: '2025-11-10T14:30:00' },
-          { id: '2', title: 'Fatura fechada', message: 'Sua fatura de novembro foi fechada no valor de R$ 6.550,00. Vencimento: 15/12', type: 'invoice', is_read: false, priority: 'high', created_date: '2025-11-10T00:00:00' },
-          { id: '3', title: 'Lembrete de pagamento', message: 'Sua fatura vence em 5 dias. Não esqueça de realizar o pagamento!', type: 'invoice', is_read: false, priority: 'high', created_date: '2025-11-09T09:00:00' },
-          { id: '4', title: 'Pontos acumulados', message: 'Você acumulou 450 pontos este mês! Confira as opções de resgate.', type: 'general', is_read: true, priority: 'low', created_date: '2025-11-08T12:00:00' }
-        ];
-      }
+      // Mock local de notificações
+      return [
+        { id: '1', title: 'Nova transação aprovada', message: 'Compra no valor de R$ 458,90 aprovada no Supermercado Bom Preço', type: 'transaction', is_read: false, priority: 'medium', created_date: '2025-11-10T14:30:00' },
+        { id: '2', title: 'Fatura fechada', message: 'Sua fatura de novembro foi fechada no valor de R$ 6.550,00. Vencimento: 15/12', type: 'invoice', is_read: false, priority: 'high', created_date: '2025-11-10T00:00:00' },
+        { id: '3', title: 'Lembrete de pagamento', message: 'Sua fatura vence em 5 dias. Não esqueça de realizar o pagamento!', type: 'invoice', is_read: false, priority: 'high', created_date: '2025-11-09T09:00:00' },
+        { id: '4', title: 'Pontos acumulados', message: 'Você acumulou 450 pontos este mês! Confira as opções de resgate.', type: 'general', is_read: true, priority: 'low', created_date: '2025-11-08T12:00:00' }
+      ];
     },
     initialData: [],
   });

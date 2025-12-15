@@ -1,6 +1,6 @@
 import React from "react";
-import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
+
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -20,40 +20,32 @@ export default function ProfilePage() {
   const { data: user } = useQuery({
     queryKey: ['currentUser'],
     queryFn: async () => {
-      try {
-        return await base44.auth.me();
-      } catch (error) {
-        // Return mock user
-        return {
-          email: 'demo@hubcoop.com',
-          full_name: 'João Silva Santos',
-          role: 'user'
-        };
-      }
+      // Mock de usuário local
+      return {
+        email: 'demo@hubcoop.com',
+        full_name: 'João Silva Santos',
+        role: 'user'
+      };
     },
   });
 
   const { data: profile, isLoading } = useQuery({
     queryKey: ['userProfile'],
     queryFn: async () => {
-      try {
-        const profiles = await base44.entities.UserProfile.filter({ created_by: user?.email });
-        return profiles[0];
-      } catch (error) {
-        // Return mock profile
-        return {
-          full_name: 'João Silva Santos',
-          birth_date: '1985-03-15',
-          phone: '(69) 99876-5432',
-          device_model: 'iPhone 14 Pro',
-          face_id_enabled: true,
-          notifications_enabled: true,
-          email_notifications: true,
-          sms_notifications: true,
-          whatsapp_notifications: true
-        };
-      }
+      // Mock de perfil local
+      return {
+        full_name: 'João Silva Santos',
+        birth_date: '1985-03-15',
+        phone: '(69) 99876-5432',
+        device_model: 'iPhone 14 Pro',
+        face_id_enabled: true,
+        notifications_enabled: true,
+        email_notifications: true,
+        sms_notifications: true,
+        whatsapp_notifications: true
+      };
     },
+
     enabled: !!user,
   });
 

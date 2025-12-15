@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { base44 } from "@/api/base44Client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -28,22 +28,22 @@ export default function DollarQuotePage() {
   const { data: history, isLoading } = useQuery({
     queryKey: ['dollarQuotes'],
     queryFn: async () => {
-      try {
-        return await base44.entities.DollarQuote.list('-created_date', 20);
-      } catch (error) {
-        // Return mock data
-        return [
-          { id: '1', quote_date: '2025-11-12', buy_rate: 5.45, sell_rate: 5.50, amount_brl: 1000.0, amount_usd: 183.49, simulation_type: 'brl_to_usd', created_date: '2025-11-12T10:00:00' },
-          { id: '2', quote_date: '2025-11-11', buy_rate: 5.42, sell_rate: 5.48, amount_brl: 2740.0, amount_usd: 500.0, simulation_type: 'usd_to_brl', created_date: '2025-11-11T15:30:00' },
-          { id: '3', quote_date: '2025-11-10', buy_rate: 5.38, sell_rate: 5.44, amount_brl: 5000.0, amount_usd: 929.37, simulation_type: 'brl_to_usd', created_date: '2025-11-10T09:15:00' }
-        ];
-      }
+      return [
+        { id: '1', quote_date: '2025-11-12', buy_rate: 5.45, sell_rate: 5.50, amount_brl: 1000.0, amount_usd: 183.49, simulation_type: 'brl_to_usd', created_date: '2025-11-12T10:00:00' },
+        { id: '2', quote_date: '2025-11-11', buy_rate: 5.42, sell_rate: 5.48, amount_brl: 2740.0, amount_usd: 500.0, simulation_type: 'usd_to_brl', created_date: '2025-11-11T15:30:00' },
+        { id: '3', quote_date: '2025-11-10', buy_rate: 5.38, sell_rate: 5.44, amount_brl: 5000.0, amount_usd: 929.37, simulation_type: 'brl_to_usd', created_date: '2025-11-10T09:15:00' }
+      ];
     },
+
     initialData: [],
   });
 
   const createQuoteMutation = useMutation({
-    mutationFn: (quoteData) => base44.entities.DollarQuote.create(quoteData),
+    mutationFn: async (quoteData) => {
+      return new Promise((resolve) => {
+        setTimeout(() => resolve(quoteData), 300);
+      });
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['dollarQuotes'] });
     },

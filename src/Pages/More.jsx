@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { createPageUrl } from "@/utils";
+
 import { Card, CardContent } from "@/components/ui/card";
 import {
   User,
@@ -18,6 +18,15 @@ import {
   Trash2,
   Info
 } from "lucide-react";
+
+const pageRoutes = {
+  Profile: "/profile",
+  Notifications: "/notifications",
+  DollarQuote: "/dollar-quote",
+  CardManagement: "/cards/manage",
+  InvoiceManagement: "/invoices/manage",
+  Security: "/security",
+};
 
 const menuSections = [
   {
@@ -39,9 +48,9 @@ const menuSections = [
     title: "Segurança e Ajuda",
     items: [
       { icon: Shield, label: "Segurança", page: "Security", description: "Configurações de segurança" },
-      { icon: Phone, label: "Central de Atendimento", page: "Support", description: "Entre em contato conosco" },
-      { icon: HelpCircle, label: "Perguntas Frequentes", page: "FAQ", description: "Tire suas dúvidas" },
-      { icon: FileCheck, label: "Termos e Condições", page: "Terms", description: "Leia nossos termos" }
+      { icon: Phone, label: "Central de Atendimento", action: "support", description: "Entre em contato conosco" },
+      { icon: HelpCircle, label: "Perguntas Frequentes", action: "faq", description: "Tire suas dúvidas" },
+      { icon: FileCheck, label: "Termos e Condições", action: "terms", description: "Leia nossos termos" }
     ]
   },
   {
@@ -67,8 +76,9 @@ export default function MorePage() {
           <div key={section.title}>
             {section.items.map((item, itemIndex) => {
               const Icon = item.icon;
-              return item.page ? (
-                <Link key={itemIndex} to={createPageUrl(item.page)}>
+              const path = item.page ? pageRoutes[item.page] : null;
+              return path ? (
+                <Link key={itemIndex} to={path}>
                   <button className="w-full flex items-center justify-between p-4 hover:bg-slate-50 rounded-lg transition-colors">
                     <div className="flex items-center gap-3">
                       <Icon className={`w-5 h-5 ${item.color || 'text-[#2D3748]'}`} aria-hidden="true" />

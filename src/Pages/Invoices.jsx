@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { base44 } from "@/api/base44Client";
+
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -26,30 +26,25 @@ export default function InvoicesPage() {
   const { data: invoices, isLoading } = useQuery({
     queryKey: ['invoices'],
     queryFn: async () => {
-      try {
-        return await base44.entities.Invoice.list('-due_date');
-      } catch (error) {
-        // Return mock data
-        return [
-          { id: '1', card_id: '1', reference_month: '2025-11', total_amount: 6550.0, due_date: '2025-12-15', closing_date: '2025-12-10', status: 'open', paid_amount: 0 },
-          { id: '2', card_id: '1', reference_month: '2025-10', total_amount: 4850.75, due_date: '2025-11-15', closing_date: '2025-11-10', status: 'closed', paid_amount: 0 },
-          { id: '3', card_id: '1', reference_month: '2025-09', total_amount: 3920.5, due_date: '2025-10-15', status: 'paid', paid_amount: 3920.5, payment_date: '2025-10-14' },
-          { id: '4', card_id: '1', reference_month: '2025-08', total_amount: 5125.3, due_date: '2025-09-15', status: 'paid', paid_amount: 5125.3, payment_date: '2025-09-13' }
-        ];
-      }
+      // Mock local de faturas
+      return [
+        { id: '1', card_id: '1', reference_month: '2025-11', total_amount: 6550.0, due_date: '2025-12-15', closing_date: '2025-12-10', status: 'open', paid_amount: 0 },
+        { id: '2', card_id: '1', reference_month: '2025-10', total_amount: 4850.75, due_date: '2025-11-15', closing_date: '2025-11-10', status: 'closed', paid_amount: 0 },
+        { id: '3', card_id: '1', reference_month: '2025-09', total_amount: 3920.5, due_date: '2025-10-15', status: 'paid', paid_amount: 3920.5, payment_date: '2025-10-14' },
+        { id: '4', card_id: '1', reference_month: '2025-08', total_amount: 5125.3, due_date: '2025-09-15', status: 'paid', paid_amount: 5125.3, payment_date: '2025-09-13' }
+      ];
     },
+
     initialData: [],
   });
 
   const { data: cards } = useQuery({
     queryKey: ['cards'],
     queryFn: async () => {
-      try {
-        return await base44.entities.Card.list();
-      } catch (error) {
-        return [{ id: '1', nickname: 'Cartão Principal' }];
-      }
+      // Mock local de cartões
+      return [{ id: '1', nickname: 'Cartão Principal' }];
     },
+
     initialData: [],
   });
 

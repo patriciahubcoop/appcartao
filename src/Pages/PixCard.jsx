@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { base44 } from "@/api/base44Client";
+
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -34,17 +34,14 @@ export default function PixCardPage() {
   const { data: cards, isLoading } = useQuery({
     queryKey: ['cards'],
     queryFn: async () => {
-      try {
-        return await base44.entities.Card.list('-updated_date');
-      } catch (error) {
-        return [{
-          id: '1',
-          nickname: 'Cartão Principal',
-          card_number_last4: '4521',
-          available_limit: 8450.0,
-          status: 'active'
-        }];
-      }
+      // Mock local de cartões
+      return [{
+        id: '1',
+        nickname: 'Cartão Principal',
+        card_number_last4: '4521',
+        available_limit: 8450.0,
+        status: 'active'
+      }];
     },
     initialData: [],
   });

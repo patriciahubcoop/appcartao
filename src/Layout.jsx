@@ -1,17 +1,17 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
-import { createPageUrl } from "@/utils";
+//import { createPageUrl } from "@/utils";
 import { Home, Receipt, CreditCard, Wallet, MoreHorizontal } from "lucide-react";
 
 export default function Layout({ children, currentPageName }) {
   const location = useLocation();
   
   const navigationItems = [
-    { name: "Home", path: createPageUrl("Home"), icon: Home, label: "Início" },
-    { name: "Transactions", path: createPageUrl("Transactions"), icon: Receipt, label: "Extrato" },
-    { name: "Cards", path: createPageUrl("Cards"), icon: CreditCard, label: "Cartões" },
-    { name: "More", path: createPageUrl("More"), icon: MoreHorizontal, label: "Menu" }
-  ];
+ { name: "Home", path: "/", icon: Home, label: "Início" },
+ { name: "Transactions", path: "/transactions", icon: Receipt, label: "Extrato" },
+ { name: "Cards", path: "/cards", icon: CreditCard, label: "Cartões" },
+ { name: "More", path: "/more", icon: MoreHorizontal, label: "Menu" }
+ ];
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 pb-20">

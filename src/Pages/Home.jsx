@@ -1,8 +1,7 @@
 import React, { useState } from "react";
-import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
-import { createPageUrl } from "@/utils";
+
 import {
   Eye,
   EyeOff,
@@ -29,62 +28,56 @@ export default function HomePage() {
   const { data: cards, isLoading: cardsLoading } = useQuery({
     queryKey: ['cards'],
     queryFn: async () => {
-      try {
-        return await base44.entities.Card.list('-updated_date');
-      } catch (error) {
-        // Return mock data if not authenticated
-        return [{
-          id: '1',
-          nickname: 'Cartão Principal',
-          holder_name: 'João Silva Santos',
-          cpf_cnpj: '123.456.789-00',
-          card_number_last4: '4521',
-          total_limit: 15000.0,
-          available_limit: 8450.0,
-          current_invoice_amount: 6550.0,
-          due_date: '2025-12-15',
-          best_purchase_date: 'Dia 10',
-          billing_period_start: '2025-11-16',
-          billing_period_end: '2025-12-15',
-          is_blocked: false,
-          contactless_enabled: true,
-          points_balance: 12450,
-          status: 'active'
-        }];
-      }
+      // Mock local de cartão principal
+      return [{
+        id: '1',
+        nickname: 'Cartão Principal',
+        holder_name: 'João Silva Santos',
+        cpf_cnpj: '123.456.789-00',
+        card_number_last4: '4521',
+        total_limit: 15000.0,
+        available_limit: 8450.0,
+        current_invoice_amount: 6550.0,
+        due_date: '2025-12-15',
+        best_purchase_date: 'Dia 10',
+        billing_period_start: '2025-11-16',
+        billing_period_end: '2025-12-15',
+        is_blocked: false,
+        contactless_enabled: true,
+        points_balance: 12450,
+        status: 'active'
+      }];
     },
+
     initialData: [],
   });
 
   const { data: notifications, isLoading: notificationsLoading } = useQuery({
     queryKey: ['notifications'],
     queryFn: async () => {
-      try {
-        return await base44.entities.Notification.filter({ is_read: false });
-      } catch (error) {
-        // Return mock data if not authenticated
-        return [
-          {
-            id: '1',
-            title: 'Nova transação aprovada',
-            message: 'Compra no valor de R$ 458,90 aprovada',
-            is_read: false
-          },
-          {
-            id: '2',
-            title: 'Fatura fechada',
-            message: 'Sua fatura de novembro foi fechada',
-            is_read: false
-          },
-          {
-            id: '3',
-            title: 'Lembrete de pagamento',
-            message: 'Sua fatura vence em 5 dias',
-            is_read: false
-          }
-        ];
-      }
+      // Mock local de notificações
+      return [
+        {
+          id: '1',
+          title: 'Nova transação aprovada',
+          message: 'Compra no valor de R$ 458,90 aprovada',
+          is_read: false
+        },
+        {
+          id: '2',
+          title: 'Fatura fechada',
+          message: 'Sua fatura de novembro foi fechada',
+          is_read: false
+        },
+        {
+          id: '3',
+          title: 'Lembrete de pagamento',
+          message: 'Sua fatura vence em 5 dias',
+          is_read: false
+        }
+      ];
     },
+
     initialData: [],
   });
 
@@ -95,19 +88,20 @@ export default function HomePage() {
   }, [cards, selectedCard]);
 
   const quickActions = [
-    { icon: QrCode, label: "Pix com cartão", page: "PixCard", color: "#4A9B9E" },
-    { icon: CreditCard, label: "Consultar Limites", page: "Limits", color: "#4A9B9E" },
-    { icon: Receipt, label: "Pagar", page: "Invoices", color: "#4A9B9E" },
-    { icon: Smartphone, label: "Recarga", page: null, color: "#4A9B9E" },
+    { icon: QrCode, label: "Pix com cartão", path: "/pix-card", color: "#4A9B9E" },
+    { icon: CreditCard, label: "Consultar Limites", path: "/limits", color: "#4A9B9E" },
+    { icon: Receipt, label: "Pagar", path: "/invoices", color: "#4A9B9E" },
+    { icon: Smartphone, label: "Recarga", path: null, color: "#4A9B9E" },
   ];
 
   const menuItems = [
-    { icon: CreditCard, label: "Meus cartões", page: "Cards" },
+    { icon: CreditCard, label: "Meus cartões", path: "/cards" },
+
     { icon: DollarSign, label: "Empréstimo", page: null },
     { icon: TrendingUp, label: "Investimentos", page: null },
     { icon: Users, label: "Indicar amigos", page: null },
     { icon: Percent, label: "Cobrar", page: null },
-    { icon: Landmark, label: "Depositar", page: null },
+    { icon: Landmark, label: "Depositar", path: null },
   ];
 
   if (cardsLoading) {
@@ -156,8 +150,8 @@ export default function HomePage() {
 
         <div className="flex gap-3 mt-6 overflow-x-auto pb-2 scrollbar-hide">
           {quickActions.map((action, idx) => (
-            action.page ? (
-              <Link key={idx} to={createPageUrl(action.page)} className="flex-shrink-0">
+            action.path ? (
+              <Link key={idx} to={action.path} className="flex-shrink-0">
                 <div className="flex flex-col items-center gap-2">
                   <div className="w-16 h-16 rounded-full bg-white/20 flex items-center justify-center backdrop-blur-sm">
                     <action.icon className="w-7 h-7 text-white" aria-hidden="true" />
@@ -181,7 +175,7 @@ export default function HomePage() {
 
       {/* Card Section */}
       <div className="bg-white rounded-t-3xl px-6 py-6 min-h-screen">
-        <Link to={createPageUrl("Cards")}>
+        <Link to="/cards">
           <Card className="border-none shadow-sm hover:shadow-md transition-shadow mb-4">
             <CardContent className="p-4">
               <div className="flex items-center justify-between">
@@ -212,8 +206,8 @@ export default function HomePage() {
         {/* Menu Items */}
         <div className="space-y-1">
           {menuItems.map((item, idx) => (
-            item.page ? (
-              <Link key={idx} to={createPageUrl(item.page)}>
+            item.path ? (
+              <Link key={idx} to={item.path}>
                 <button className="w-full flex items-center justify-between p-4 hover:bg-slate-50 rounded-lg transition-colors">
                   <div className="flex items-center gap-3">
                     <item.icon className="w-5 h-5 text-[#2D3748]" aria-hidden="true" />
@@ -250,7 +244,7 @@ export default function HomePage() {
             </CardContent>
           </Card>
 
-          <Link to={createPageUrl("DollarQuote")}>
+          <Link to="/dollar-quote">
             <Card className="border-none shadow-sm bg-gradient-to-br from-green-500 to-emerald-600">
               <CardContent className="p-4">
                 <div className="flex items-center justify-between">
