@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -36,7 +35,6 @@ export default function CardsPage() {
   const { data: cards, isLoading: cardsLoading } = useQuery({
     queryKey: ['cards'],
     queryFn: async () => {
-      // Mock local de cartões
       return [{
         id: '1',
         nickname: 'Cartão Principal',
@@ -55,7 +53,6 @@ export default function CardsPage() {
   const { data: requests, isLoading: requestsLoading } = useQuery({
     queryKey: ['cardRequests'],
     queryFn: async () => {
-      // Mock local de solicitações
       return [
         { id: '1', request_type: 'new_card', card_type: 'credit', status: 'pending', created_date: '2025-11-12T10:00:00' },
         { id: '2', request_type: 'second_copy', card_type: 'credit', status: 'approved', created_date: '2025-11-08T15:30:00' }
@@ -94,21 +91,23 @@ export default function CardsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-gradient-to-b from-[#014726] via-[#026c35] to-[#059641]">
+      
       {/* Header */}
-      <header className="bg-gradient-to-br from-[#014726] via-[#026c35] to-[#059641] px-4 pt-12 pb-6 rounded-b-3xl">
+      <div className="px-6 pt-16 pb-8">
         <h1 className="text-[color:var(--accent-yellow,#C6FF4A)] text-2xl font-extrabold mb-1">Meus Cartões</h1>
         <p className="text-white/90 text-sm">Gerencie seus cartões físicos e virtuais</p>
-      </header>
+      </div>
 
-      <div className="px-4 py-6">
+      {/* Conteúdo Principal */}
+      <div className="bg-white rounded-t-3xl px-6 py-6 min-h-screen shadow-[0_-8px_24px_rgba(0,0,0,0.15)]">
         <Tabs defaultValue="cards" className="space-y-6">
-          <TabsList className="w-full grid grid-cols-2 h-auto p-1 bg-white">
-            <TabsTrigger value="cards" className="text-sm py-2.5">
+          <TabsList className="w-full grid grid-cols-2 h-auto p-1 bg-slate-100">
+            <TabsTrigger value="cards" className="text-sm py-2.5 data-[state=active]:bg-white data-[state=active]:text-[#014726]">
               <CreditCard className="w-4 h-4 mr-2" aria-hidden="true" />
               Cartões
             </TabsTrigger>
-            <TabsTrigger value="requests" className="text-sm py-2.5">
+            <TabsTrigger value="requests" className="text-sm py-2.5 data-[state=active]:bg-white data-[state=active]:text-[#014726]">
               <Clock className="w-4 h-4 mr-2" aria-hidden="true" />
               Solicitações
             </TabsTrigger>
@@ -135,8 +134,8 @@ export default function CardsPage() {
                 {cards.map((card) => (
                   <Card key={card.id} className="border-none shadow-md overflow-hidden">
                     <CardContent className="p-0">
-                      {/* Card Visual */}
-                      <div className="bg-gradient-to-br from-slate-800 to-slate-900 text-white p-6 relative overflow-hidden">
+                      {/* Visual do Cartão */}
+                      <div className="bg-gradient-to-br from-[#1F2933] to-[#014726] text-white p-6 relative overflow-hidden">
                         <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -mr-16 -mt-16" aria-hidden="true" />
                         
                         <div className="flex items-start justify-between mb-6 relative z-10">
@@ -206,14 +205,14 @@ export default function CardsPage() {
 
                       {/* Actions Section */}
                       <div className="p-4 bg-slate-50 border-t border-slate-200 space-y-4">
-                        {/* Travel Notice Button */}
+                        {/* Aviso de Viagem - Outline */}
                         <Button
                           onClick={() => {
                             setSelectedCardForTravel(card);
                             setTravelDialogOpen(true);
                           }}
                           variant="outline"
-                          className="w-full border-blue-200 text-blue-600 hover:bg-blue-50"
+                          className="w-full border-[#014726]/20 text-[#014726] hover:bg-[#014726]/5"
                         >
                           <Plane className="w-4 h-4 mr-2" aria-hidden="true" />
                           Aviso de Viagem
@@ -222,7 +221,7 @@ export default function CardsPage() {
                         {/* Virtual Card & CVV Section */}
                         <div>
                           <div className="flex items-center gap-2 mb-3">
-                            <Smartphone className="w-4 h-4 text-[#4A9B9E]" aria-hidden="true" />
+                            <Smartphone className="w-4 h-4 text-[#014726]" aria-hidden="true" />
                             <h3 className="text-[#2D3748] font-semibold text-sm">Cartão Virtual</h3>
                           </div>
 
@@ -246,10 +245,11 @@ export default function CardsPage() {
                             </div>
                           )}
 
+                          {/* Botão CVV - FORÇADO PARA VERDE (Usei !bg e !text) */}
                           <Button
                             onClick={handleGenerateCVV}
                             disabled={generatingCVV}
-                            className="w-full bg-[#4A9B9E] hover:bg-[#3D8385]"
+                            className="w-full !bg-[#014726] hover:!bg-[#026c35] text-white border-none"
                           >
                             {generatingCVV ? (
                               <>
@@ -274,10 +274,10 @@ export default function CardsPage() {
                   </Card>
                 ))}
 
-                {/* Request New Card Button */}
+                {/* Botão Novo Cartão - Outline */}
                 <Button
                   variant="outline"
-                  className="w-full border-2 border-dashed border-[#4A9B9E] text-[#4A9B9E] hover:bg-[#4A9B9E]/5 h-14"
+                  className="w-full border-2 border-dashed border-[#014726]/30 text-[#014726] hover:bg-[#014726]/5 h-14"
                 >
                   <Plus className="w-5 h-5 mr-2" aria-hidden="true" />
                   Solicitar Novo Cartão
@@ -290,7 +290,9 @@ export default function CardsPage() {
           <TabsContent value="requests" className="space-y-4">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-[#2D3748] font-bold text-lg">Minhas Solicitações</h2>
-              <Button className="bg-[#4A9B9E] hover:bg-[#3D8385]">
+              
+              {/* Botão Nova Solicitação - FORÇADO PARA VERDE (Usei !bg e !text) */}
+              <Button className="!bg-[#014726] hover:!bg-[#026c35] text-white border-none">
                 <Plus className="w-4 h-4 mr-2" aria-hidden="true" />
                 Nova Solicitação
               </Button>
@@ -322,7 +324,7 @@ export default function CardsPage() {
                         <div className="flex items-start justify-between mb-3">
                           <div className="flex-1">
                             <div className="flex items-center gap-2 mb-1">
-                              <CreditCard className="w-4 h-4 text-[#4A9B9E]" aria-hidden="true" />
+                              <CreditCard className="w-4 h-4 text-[#014726]" aria-hidden="true" />
                               <h3 className="text-[#2D3748] font-semibold">
                                 {request.request_type === 'new_card' ? 'Novo Cartão' : 
                                  request.request_type === 'second_copy' ? 'Segunda Via' : 
@@ -370,7 +372,6 @@ export default function CardsPage() {
           </TabsContent>
         </Tabs>
 
-        {/* Travel Notice Dialog */}
         <TravelNoticeDialog
           open={travelDialogOpen}
           onOpenChange={setTravelDialogOpen}

@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -13,14 +12,12 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import {
   Search,
   Filter,
   Calendar,
   TrendingDown,
-  TrendingUp,
   ShoppingBag,
   UtensilsCrossed,
   Car,
@@ -30,7 +27,6 @@ import {
   Zap,
   Package,
   FastForward,
-  CreditCard as CreditCardIcon
 } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
@@ -81,17 +77,6 @@ export default function TransactionsPage() {
         { id: '5', merchant_name: 'Netflix', category: 'lazer', amount: 55.9, transaction_date: '2025-11-05T00:01:00', transaction_type: 'credit', installments: 1, status: 'completed' }
       ];
     },
-
-    initialData: [],
-  });
-
-  const { data: cards } = useQuery({
-    queryKey: ['cards'],
-    queryFn: async () => {
-      // Mock local de cartões (não usado diretamente na UI por enquanto)
-      return [];
-    },
-
     initialData: [],
   });
 
@@ -128,13 +113,15 @@ export default function TransactionsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      {/* Header */}
-      <div className="bg-gradient-to-br from-[#4A9B9E] to-[#3D8385] px-4 pt-12 pb-6 rounded-b-3xl">
-        <h1 className="text-white text-2xl font-bold mb-4">Transações</h1>
+    // 1. Fundo Gradiente Verde (Tema Home)
+    <div className="min-h-screen bg-gradient-to-b from-[#014726] via-[#026c35] to-[#059641]">
+      
+      {/* 2. Header no padrão da Home */}
+      <div className="px-6 pt-16 pb-8">
+        <h1 className="text-[color:var(--accent-yellow,#C6FF4A)] text-2xl font-extrabold mb-4">Transações</h1>
         
-        {/* Summary Cards */}
-        <div className="grid grid-cols-2 gap-3 mb-4">
+        {/* Summary Cards - Mantidos com transparência sobre o verde */}
+        <div className="grid grid-cols-2 gap-3 mb-2">
           <Card className="bg-white/10 border-white/20 backdrop-blur">
             <CardContent className="p-4">
               <div className="flex items-center gap-2 text-white/80 text-xs mb-1">
@@ -158,39 +145,41 @@ export default function TransactionsPage() {
             </CardContent>
           </Card>
         </div>
+      </div>
 
-        {/* Search */}
-        <div className="relative">
+      {/* 3. Conteúdo em "Folha Branca" (Tema Home) */}
+      <div className="bg-white rounded-t-3xl px-6 py-6 min-h-screen shadow-[0_-8px_24px_rgba(0,0,0,0.15)]">
+        
+        {/* Search Input - Movido para dentro da área branca para contraste */}
+        <div className="relative mb-4">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400" />
           <Input
             placeholder="Buscar transação..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-10 bg-white border-none"
+            className="pl-10 bg-slate-50 border-slate-200"
           />
         </div>
-      </div>
 
-      <div className="px-4 py-6 space-y-4">
-        {/* Anticipate Invoice Button */}
+        {/* Anticipate Invoice Button - Verde Escuro Institucional */}
         <Button
           onClick={() => {
             setAnticipateType("invoice");
             setAnticipateDialogOpen(true);
           }}
-          className="w-full bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 shadow-md"
+          className="w-full !bg-[#014726] hover:!bg-[#026c35] shadow-md mb-6"
         >
           <FastForward className="w-4 h-4 mr-2" aria-hidden="true" />
           Antecipar Pagamento da Fatura
         </Button>
 
-        {/* Filter Tabs */}
-        <Tabs value={filterType} onValueChange={setFilterType}>
-          <TabsList className="w-full bg-white grid grid-cols-4 h-auto p-1">
-            <TabsTrigger value="all" className="text-xs">Todas</TabsTrigger>
-            <TabsTrigger value="credit" className="text-xs">Crédito</TabsTrigger>
-            <TabsTrigger value="debit" className="text-xs">Débito</TabsTrigger>
-            <TabsTrigger value="installment" className="text-xs">Parcelado</TabsTrigger>
+        {/* Filter Tabs - Ajustadas para usar a cor verde na seleção */}
+        <Tabs value={filterType} onValueChange={setFilterType} className="mb-6">
+          <TabsList className="w-full bg-slate-100 grid grid-cols-4 h-auto p-1">
+            <TabsTrigger value="all" className="text-xs data-[state=active]:text-[#014726]">Todas</TabsTrigger>
+            <TabsTrigger value="credit" className="text-xs data-[state=active]:text-[#014726]">Crédito</TabsTrigger>
+            <TabsTrigger value="debit" className="text-xs data-[state=active]:text-[#014726]">Débito</TabsTrigger>
+            <TabsTrigger value="installment" className="text-xs data-[state=active]:text-[#014726]">Parcelas</TabsTrigger>
           </TabsList>
         </Tabs>
 
@@ -211,8 +200,8 @@ export default function TransactionsPage() {
         ) : (
           Object.entries(groupedByDate).map(([date, dayTransactions]) => (
             <div key={date}>
-              <div className="flex items-center gap-2 mb-3 px-1">
-                <Calendar className="w-4 h-4 text-[#718096]" />
+              <div className="flex items-center gap-2 mb-3 px-1 mt-4">
+                <Calendar className="w-4 h-4 text-[#014726]" /> {/* Ícone Verde */}
                 <h3 className="text-[#2D3748] font-bold text-sm">
                   {format(new Date(date), "dd 'de' MMMM, yyyy", { locale: ptBR })}
                 </h3>
@@ -258,6 +247,7 @@ export default function TransactionsPage() {
                         </div>
 
                         {transaction.installments > 1 && (
+                          // Botão Antecipar Parcelas - Ajustado para Verde
                           <Button
                             variant="outline"
                             size="sm"
@@ -266,7 +256,7 @@ export default function TransactionsPage() {
                               setAnticipateType("transaction");
                               setAnticipateDialogOpen(true);
                             }}
-                            className="w-full mt-3 text-green-600 border-green-200 hover:bg-green-50"
+                            className="w-full mt-3 text-[#014726] border-[#014726]/20 hover:bg-[#014726]/5"
                           >
                             <FastForward className="w-3 h-3 mr-2" aria-hidden="true" />
                             Antecipar Parcelas
@@ -305,7 +295,7 @@ export default function TransactionsPage() {
                     </div>
                     <div className="flex items-center justify-between">
                       <span className="text-sm text-[#718096]">Desconto (antecipação)</span>
-                      <span className="font-bold text-green-600">-R$ 131,00</span>
+                      <span className="font-bold text-[#014726]">-R$ 131,00</span>
                     </div>
                     <div className="pt-2 border-t border-slate-200">
                       <div className="flex items-center justify-between">
@@ -336,7 +326,7 @@ export default function TransactionsPage() {
                     </div>
                     <div className="flex items-center justify-between">
                       <span className="text-sm text-[#718096]">Desconto (antecipação)</span>
-                      <span className="font-bold text-green-600">-R$ {(selectedTransaction?.amount * 0.02)?.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span>
+                      <span className="font-bold text-[#014726]">-R$ {(selectedTransaction?.amount * 0.02)?.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span>
                     </div>
                     <div className="pt-2 border-t border-slate-200">
                       <div className="flex items-center justify-between">
@@ -362,9 +352,10 @@ export default function TransactionsPage() {
                 >
                   Cancelar
                 </Button>
+                {/* Botão Confirmar - Verde Institucional */}
                 <Button
                   onClick={anticipateType === "invoice" ? handleAnticipateInvoice : () => handleAnticipateTransaction(selectedTransaction)}
-                  className="flex-1 bg-[#4A9B9E] hover:bg-[#3D8385]"
+                  className="flex-1 !bg-[#014726] hover:!bg-[#026c35]"
                 >
                   Confirmar
                 </Button>

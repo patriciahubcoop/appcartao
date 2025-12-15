@@ -9,15 +9,9 @@ import {
   ChevronRight,
   Smartphone,
   CreditCard,
-  DollarSign,
-  TrendingUp,
-  Users,
-  Percent,
   Receipt,
   QrCode,
-  Send,
-  Landmark,
-  PiggyBank
+  Users // <--- ADICIONADO AQUI
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -38,7 +32,6 @@ export default function HomePage() {
         card_number_last4: '4521',
         total_limit: 15000.0,
         available_limit: 8450.0,
-        current_invoice_amount: 6550.0,
         due_date: '2025-12-15',
         best_purchase_date: 'Dia 10',
         billing_period_start: '2025-11-16',
@@ -49,14 +42,12 @@ export default function HomePage() {
         status: 'active'
       }];
     },
-
     initialData: [],
   });
 
   const { data: notifications, isLoading: notificationsLoading } = useQuery({
     queryKey: ['notifications'],
     queryFn: async () => {
-      // Mock local de notificações
       return [
         {
           id: '1',
@@ -78,7 +69,6 @@ export default function HomePage() {
         }
       ];
     },
-
     initialData: [],
   });
 
@@ -97,12 +87,8 @@ export default function HomePage() {
 
   const menuItems = [
     { icon: CreditCard, label: "Meus cartões", path: "/cards" },
-
-    { icon: DollarSign, label: "Empréstimo", page: null },
-    { icon: TrendingUp, label: "Investimentos", page: null },
-    { icon: Users, label: "Indicar amigos", page: null },
-    { icon: Percent, label: "Cobrar", page: null },
-    { icon: Landmark, label: "Depositar", path: null },
+    { icon: CreditCard, label: "Meus limites", path: "/limits" },
+    { icon: Users, label: "Indicar amigos", page: null } 
   ];
 
   if (cardsLoading) {
@@ -115,8 +101,6 @@ export default function HomePage() {
             <Skeleton key={i} className="h-20 rounded-xl" />
           ))}
         </div>
-
-        {/* CTAs principais, inspirados no site */}
         <div className="mt-6 flex gap-3">
           <button className="flex-1 h-11 rounded-full bg-[color:var(--accent-yellow,#C6FF4A)] text-[#014726] font-semibold text-sm shadow-md">
             Abra sua conta
@@ -129,8 +113,12 @@ export default function HomePage() {
     );
   }
 
-  const currentBalance = selectedCard?.available_limit || 8450.0;
-  const totalLimit = selectedCard?.total_limit || 15000.0;
+  // Define valores padrão para evitar erros de renderização
+  const availableLimit = selectedCard?.available_limit ?? 8450.0;
+  const totalLimit = selectedCard?.total_limit ?? 15000.0;
+  
+  // Cálculo: Limite Total - Limite Disponível = Fatura Atual
+  const currentInvoice = totalLimit - availableLimit;
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#014726] via-[#026c35] to-[#059641]">
@@ -153,7 +141,7 @@ export default function HomePage() {
           </button>
         </div>
 
-        {/* Logo posicionado na faixa verde, à direita */}
+        {/* Logo */}
         <img
           src={logoCredisis}
           alt="CrediSIS"
@@ -161,9 +149,9 @@ export default function HomePage() {
         />
 
         <div className="mb-2">
-          <p className="text-[color:var(--accent-yellow,#C6FF4A)] text-sm mb-1 font-medium">Saldo disponível</p>
+          <p className="text-[color:var(--accent-yellow,#C6FF4A)] text-sm mb-1 font-medium">Limite disponível</p>
           <p className="text-white text-3xl font-semibold">
-            {showBalance ? `R$ ${currentBalance.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}` : 'R$ ••••••'}
+            {showBalance ? `R$ ${availableLimit.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}` : 'R$ ••••••'}
           </p>
         </div>
 
@@ -211,11 +199,13 @@ export default function HomePage() {
               </div>
               <div className="mt-4 pt-4 border-t border-slate-100">
                 <p className="text-[#6B7280] text-xs mb-1">Fatura atual</p>
+                
                 <p className="text-[#1F2933] text-xl font-bold">
-                  {showBalance ? `R$ ${selectedCard?.current_invoice_amount?.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}` : 'R$ ••••••'}
+                  {showBalance ? `R$ ${currentInvoice.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}` : 'R$ ••••••'}
                 </p>
+
                 <p className="text-[#718096] text-sm mt-1">
-                  Limite disponível: {showBalance ? `R$ ${currentBalance.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}` : 'R$ ••••••'}
+                  Limite disponível: {showBalance ? `R$ ${availableLimit.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}` : 'R$ ••••••'}
                 </p>
               </div>
             </CardContent>

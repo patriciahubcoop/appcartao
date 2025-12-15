@@ -1,11 +1,9 @@
 import React, { useState } from "react";
-
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   Select,
@@ -26,9 +24,7 @@ import {
   TrendingUp,
   ArrowUp,
   ArrowDown,
-  Settings,
-  Info,
-  CheckCircle
+  Info
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -43,7 +39,6 @@ export default function LimitsPage() {
   const { data: cards, isLoading } = useQuery({
     queryKey: ['cards'],
     queryFn: async () => {
-      // Mock local de cartões
       return [{
         id: '1',
         nickname: 'Cartão Principal',
@@ -58,7 +53,6 @@ export default function LimitsPage() {
 
   const updateLimitMutation = useMutation({
     mutationFn: async ({ cardId, newLimit }) => {
-      // Simula atualização de limite sem chamada real de API
       return new Promise((resolve) => {
         setTimeout(
           () =>
@@ -86,17 +80,15 @@ export default function LimitsPage() {
 
   const handleSubmitLimit = (e) => {
     e.preventDefault();
-    
+    // (Validações mantidas)
     if (!newLimit || parseFloat(newLimit) <= 0) {
       toast.error('Informe um valor válido');
       return;
     }
-
     if (adjustmentType === "increase" && parseFloat(newLimit) <= selectedCard.total_limit) {
       toast.error('O novo limite deve ser maior que o atual');
       return;
     }
-
     if (adjustmentType === "decrease" && parseFloat(newLimit) >= selectedCard.total_limit) {
       toast.error('O novo limite deve ser menor que o atual');
       return;
@@ -115,10 +107,7 @@ export default function LimitsPage() {
   if (isLoading) {
     return (
       <div className="min-h-screen bg-slate-50">
-        <div className="bg-gradient-to-br from-[#4A9B9E] to-[#3D8385] px-6 pt-12 pb-8">
-          <Skeleton className="h-8 w-48 bg-white/20 mb-2" />
-          <Skeleton className="h-4 w-64 bg-white/20" />
-        </div>
+        <Skeleton className="h-48 w-full" />
         <div className="px-6 py-6 space-y-4">
           <Skeleton className="h-48 w-full" />
           <Skeleton className="h-32 w-full" />
@@ -128,17 +117,21 @@ export default function LimitsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      {/* Header */}
-      <div className="bg-gradient-to-br from-[#4A9B9E] to-[#3D8385] px-6 pt-12 pb-8">
-        <h1 className="text-white text-2xl font-bold mb-2">Limites do Cartão</h1>
+    // 1. Fundo Gradiente Verde
+    <div className="min-h-screen bg-gradient-to-b from-[#014726] via-[#026c35] to-[#059641]">
+      
+      {/* 2. Header Institucional */}
+      <div className="px-6 pt-16 pb-8">
+        <h1 className="text-[color:var(--accent-yellow,#C6FF4A)] text-2xl font-extrabold mb-2">Limites do Cartão</h1>
         <p className="text-white/80 text-sm">Consulte e gerencie seus limites</p>
       </div>
 
-      <div className="px-6 py-6 space-y-6">
+      {/* 3. Container "Folha Branca" */}
+      <div className="bg-white rounded-t-3xl px-6 py-6 min-h-screen shadow-[0_-8px_24px_rgba(0,0,0,0.15)]">
+        
         {/* Card Selector */}
         {cards.length > 1 && (
-          <div className="space-y-2">
+          <div className="space-y-2 mb-6">
             <Label className="text-sm font-semibold text-[#2D3748]">Selecione o cartão</Label>
             <Select 
               value={selectedCard?.id} 
@@ -160,8 +153,8 @@ export default function LimitsPage() {
 
         {selectedCard && (
           <>
-            {/* Current Limit Card */}
-            <Card className="border-none shadow-lg bg-gradient-to-br from-[#4A9B9E] to-[#3D8385]">
+            {/* Current Limit Card - Visual Escuro Institucional */}
+            <Card className="border-none shadow-lg bg-gradient-to-br from-[#1F2933] to-[#014726]">
               <CardContent className="p-6">
                 <div className="flex items-center gap-2 text-white/80 text-sm mb-4">
                   <CreditCard className="w-5 h-5" aria-hidden="true" />
@@ -206,13 +199,13 @@ export default function LimitsPage() {
             </Card>
 
             {/* Info Card */}
-            <Card className="border-none shadow-sm bg-blue-50">
+            <Card className="border-none shadow-sm bg-green-50 mt-6">
               <CardContent className="p-4">
                 <div className="flex gap-3">
-                  <Info className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" aria-hidden="true" />
+                  <Info className="w-5 h-5 text-[#014726] flex-shrink-0 mt-0.5" aria-hidden="true" />
                   <div>
-                    <p className="text-blue-900 font-semibold text-sm mb-1">Como funciona?</p>
-                    <p className="text-blue-800 text-xs leading-relaxed">
+                    <p className="text-[#014726] font-semibold text-sm mb-1">Como funciona?</p>
+                    <p className="text-[#014726]/80 text-xs leading-relaxed">
                       Você pode solicitar aumento ou redução do limite. As solicitações são analisadas em até 2 dias úteis.
                     </p>
                   </div>
@@ -221,13 +214,13 @@ export default function LimitsPage() {
             </Card>
 
             {/* Actions */}
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 gap-3 mt-6">
               <Button
                 onClick={() => {
                   setAdjustmentType("increase");
                   setDialogOpen(true);
                 }}
-                className="h-auto py-4 bg-green-600 hover:bg-green-700 flex-col gap-2"
+                className="h-auto py-4 !bg-[#014726] hover:!bg-[#026c35] flex-col gap-2"
               >
                 <ArrowUp className="w-5 h-5" aria-hidden="true" />
                 <span className="text-sm font-semibold">Aumentar Limite</span>
@@ -239,7 +232,7 @@ export default function LimitsPage() {
                   setDialogOpen(true);
                 }}
                 variant="outline"
-                className="h-auto py-4 flex-col gap-2 border-2"
+                className="h-auto py-4 flex-col gap-2 border-2 text-[#014726] border-[#014726]/20"
               >
                 <ArrowDown className="w-5 h-5" aria-hidden="true" />
                 <span className="text-sm font-semibold">Reduzir Limite</span>
@@ -247,7 +240,7 @@ export default function LimitsPage() {
             </div>
 
             {/* Limit History */}
-            <div>
+            <div className="mt-6">
               <h3 className="text-[#2D3748] font-bold mb-3 px-1">Histórico de Ajustes</h3>
               <Card className="border-none shadow-sm">
                 <CardContent className="p-8 text-center">
@@ -319,7 +312,7 @@ export default function LimitsPage() {
               <Button
                 type="submit"
                 disabled={updateLimitMutation.isPending}
-                className="flex-1 bg-[#4A9B9E] hover:bg-[#3D8385]"
+                className="flex-1 !bg-[#014726] hover:!bg-[#026c35]"
               >
                 {updateLimitMutation.isPending ? "Enviando..." : "Confirmar"}
               </Button>

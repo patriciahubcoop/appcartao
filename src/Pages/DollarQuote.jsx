@@ -34,7 +34,6 @@ export default function DollarQuotePage() {
         { id: '3', quote_date: '2025-11-10', buy_rate: 5.38, sell_rate: 5.44, amount_brl: 5000.0, amount_usd: 929.37, simulation_type: 'brl_to_usd', created_date: '2025-11-10T09:15:00' }
       ];
     },
-
     initialData: [],
   });
 
@@ -87,10 +86,12 @@ export default function DollarQuotePage() {
   const isPositive = rateChange >= 0;
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      {/* Header */}
-      <div className="bg-gradient-to-br from-[#4A9B9E] to-[#3D8385] px-4 pt-12 pb-6 rounded-b-3xl">
-        <h1 className="text-white text-2xl font-bold mb-2">Cotação do Dólar</h1>
+    // 1. Fundo Gradiente Verde
+    <div className="min-h-screen bg-gradient-to-b from-[#014726] via-[#026c35] to-[#059641]">
+      
+      {/* 2. Header Institucional */}
+      <div className="px-6 pt-16 pb-8">
+        <h1 className="text-[color:var(--accent-yellow,#C6FF4A)] text-2xl font-extrabold mb-2">Cotação do Dólar</h1>
         <div className="bg-white/10 backdrop-blur-sm rounded-lg p-3 mb-3" role="alert" aria-live="polite">
           <p className="text-white/90 text-xs leading-relaxed">
             ⚠️ Cotação referente ao dólar comercial do dia. Os valores podem sofrer alterações ao longo do dia de acordo com o mercado financeiro.
@@ -99,9 +100,11 @@ export default function DollarQuotePage() {
         <p className="text-white/80 text-sm">Simule conversões de moeda</p>
       </div>
 
-      <div className="px-4 py-6 space-y-6">
-        {/* Current Rate */}
-        <Card className="border-none shadow-lg bg-gradient-to-br from-green-500 to-emerald-600">
+      {/* 3. Container "Folha Branca" */}
+      <div className="bg-white rounded-t-3xl px-6 py-6 min-h-screen shadow-[0_-8px_24px_rgba(0,0,0,0.15)]">
+        
+        {/* Current Rate - Card com fundo escuro institucional (igual CardsPage) */}
+        <Card className="border-none shadow-lg bg-gradient-to-br from-[#1F2933] to-[#014726] mb-6">
           <CardContent className="p-6">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2">
@@ -133,7 +136,7 @@ export default function DollarQuotePage() {
         </Card>
 
         {/* Simulator */}
-        <Card className="border-none shadow-md">
+        <Card className="border-none shadow-md mb-6">
           <CardContent className="p-6">
             <h3 className="text-[#2D3748] font-bold mb-4">Simulador de Conversão</h3>
             
@@ -142,7 +145,8 @@ export default function DollarQuotePage() {
               <div className="flex items-center justify-center gap-3">
                 <Button
                   variant={simulationType === "brl_to_usd" ? "default" : "outline"}
-                  className={simulationType === "brl_to_usd" ? "bg-[#4A9B9E]" : ""}
+                  // Forçando o fundo verde quando ativo
+                  className={simulationType === "brl_to_usd" ? "!bg-[#014726] text-white" : ""}
                   onClick={() => setSimulationType("brl_to_usd")}
                 >
                   BRL → USD
@@ -150,7 +154,8 @@ export default function DollarQuotePage() {
                 <ArrowRightLeft className="w-5 h-5 text-[#718096]" />
                 <Button
                   variant={simulationType === "usd_to_brl" ? "default" : "outline"}
-                  className={simulationType === "usd_to_brl" ? "bg-[#4A9B9E]" : ""}
+                  // Forçando o fundo verde quando ativo
+                  className={simulationType === "usd_to_brl" ? "!bg-[#014726] text-white" : ""}
                   onClick={() => setSimulationType("usd_to_brl")}
                 >
                   USD → BRL
@@ -167,7 +172,7 @@ export default function DollarQuotePage() {
                   placeholder="0.00"
                   value={amount}
                   onChange={(e) => setAmount(e.target.value)}
-                  className="text-lg"
+                  className="text-lg bg-slate-50"
                 />
               </div>
 
@@ -187,10 +192,11 @@ export default function DollarQuotePage() {
                 </div>
               )}
 
+              {/* Botão de Simular Verde Escuro */}
               <Button
                 onClick={handleSimulate}
                 disabled={!amount || parseFloat(amount) <= 0 || createQuoteMutation.isPending}
-                className="w-full bg-[#4A9B9E] hover:bg-[#3D8385]"
+                className="w-full !bg-[#014726] hover:!bg-[#026c35]"
               >
                 {createQuoteMutation.isPending ? "Simulando..." : "Simular Conversão"}
               </Button>
@@ -201,7 +207,7 @@ export default function DollarQuotePage() {
         {/* History */}
         <div>
           <div className="flex items-center gap-2 mb-3 px-1">
-            <History className="w-5 h-5 text-[#718096]" />
+            <History className="w-5 h-5 text-[#014726]" />
             <h3 className="text-[#2D3748] font-bold">Histórico de Simulações</h3>
           </div>
           

@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -26,7 +25,6 @@ export default function InvoicesPage() {
   const { data: invoices, isLoading } = useQuery({
     queryKey: ['invoices'],
     queryFn: async () => {
-      // Mock local de faturas
       return [
         { id: '1', card_id: '1', reference_month: '2025-11', total_amount: 6550.0, due_date: '2025-12-15', closing_date: '2025-12-10', status: 'open', paid_amount: 0 },
         { id: '2', card_id: '1', reference_month: '2025-10', total_amount: 4850.75, due_date: '2025-11-15', closing_date: '2025-11-10', status: 'closed', paid_amount: 0 },
@@ -34,17 +32,14 @@ export default function InvoicesPage() {
         { id: '4', card_id: '1', reference_month: '2025-08', total_amount: 5125.3, due_date: '2025-09-15', status: 'paid', paid_amount: 5125.3, payment_date: '2025-09-13' }
       ];
     },
-
     initialData: [],
   });
 
   const { data: cards } = useQuery({
     queryKey: ['cards'],
     queryFn: async () => {
-      // Mock local de cartões
       return [{ id: '1', nickname: 'Cartão Principal' }];
     },
-
     initialData: [],
   });
 
@@ -62,12 +57,14 @@ export default function InvoicesPage() {
     .reduce((sum, inv) => sum + (inv.paid_amount || 0), 0);
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      {/* Header */}
-      <div className="bg-gradient-to-br from-[#4A9B9E] to-[#3D8385] px-4 pt-12 pb-6 rounded-b-3xl">
-        <h1 className="text-white text-2xl font-bold mb-4">Faturas</h1>
+    // 1. Fundo Gradiente Verde
+    <div className="min-h-screen bg-gradient-to-b from-[#014726] via-[#026c35] to-[#059641]">
+      
+      {/* 2. Header Institucional */}
+      <div className="px-6 pt-16 pb-8">
+        <h1 className="text-[color:var(--accent-yellow,#C6FF4A)] text-2xl font-extrabold mb-4">Faturas</h1>
         
-        {/* Current Invoice Summary */}
+        {/* Current Invoice Summary - Mantido no Header */}
         {currentInvoice && (
           <Card className="bg-white/10 border-white/20 backdrop-blur">
             <CardContent className="p-4">
@@ -109,27 +106,29 @@ export default function InvoicesPage() {
         </div>
       </div>
 
-      <div className="px-4 py-6 space-y-4">
+      {/* 3. Container "Folha Branca" */}
+      <div className="bg-white rounded-t-3xl px-6 py-6 min-h-screen shadow-[0_-8px_24px_rgba(0,0,0,0.15)]">
+        
         {/* Quick Actions */}
         {currentInvoice && (
-          <Card className="border-none shadow-md">
+          <Card className="border-none shadow-md mb-6">
             <CardContent className="p-4">
               <h3 className="text-[#2D3748] font-bold mb-3">Ações Rápidas</h3>
               <div className="grid grid-cols-2 gap-2">
                 <Button variant="outline" className="justify-start" size="sm">
-                  <Copy className="w-4 h-4 mr-2" />
+                  <Copy className="w-4 h-4 mr-2 text-[#014726]" />
                   Copiar código
                 </Button>
                 <Button variant="outline" className="justify-start" size="sm">
-                  <Mail className="w-4 h-4 mr-2" />
+                  <Mail className="w-4 h-4 mr-2 text-[#014726]" />
                   Enviar e-mail
                 </Button>
                 <Button variant="outline" className="justify-start" size="sm">
-                  <Download className="w-4 h-4 mr-2" />
+                  <Download className="w-4 h-4 mr-2 text-[#014726]" />
                   Baixar PDF
                 </Button>
                 <Button variant="outline" className="justify-start" size="sm">
-                  <Share2 className="w-4 h-4 mr-2" />
+                  <Share2 className="w-4 h-4 mr-2 text-[#014726]" />
                   Compartilhar
                 </Button>
               </div>
@@ -167,7 +166,7 @@ export default function InvoicesPage() {
                       <div className="flex items-start justify-between mb-3">
                         <div>
                           <div className="flex items-center gap-2 mb-1">
-                            <Calendar className="w-4 h-4 text-[#718096]" />
+                            <Calendar className="w-4 h-4 text-[#014726]" />
                             <span className="text-[#2D3748] font-semibold">
                               {invoice.reference_month}
                             </span>
@@ -224,7 +223,7 @@ export default function InvoicesPage() {
                         </div>
                       )}
 
-                      <Button variant="ghost" className="w-full mt-3 text-[#4A9B9E]" size="sm">
+                      <Button variant="ghost" className="w-full mt-3 text-[#014726] hover:text-[#026c35]" size="sm">
                         Ver detalhes
                         <ChevronRight className="w-4 h-4 ml-auto" />
                       </Button>

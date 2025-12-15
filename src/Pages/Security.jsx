@@ -40,32 +40,36 @@ const securityOptions = [
 
 export default function SecurityPage() {
   return (
-    <div className="min-h-screen bg-slate-50">
-      {/* Header */}
-      <div className="bg-gradient-to-br from-[#4A9B9E] to-[#3D8385] px-4 pt-12 pb-6 rounded-b-3xl">
-        <h1 className="text-white text-2xl font-bold mb-1">Segurança</h1>
-        <p className="text-white/80 text-sm">Configurações e suporte</p>
+    // 1. Fundo Gradiente Verde (Padrão Home)
+    <div className="min-h-screen bg-gradient-to-b from-[#014726] via-[#026c35] to-[#059641]">
+      
+      {/* 2. Header Institucional */}
+      <div className="px-6 pt-16 pb-8">
+        <h1 className="text-[color:var(--accent-yellow,#C6FF4A)] text-2xl font-extrabold mb-1">Segurança</h1>
+        <p className="text-white/90 text-sm">Configurações e suporte</p>
       </div>
 
-      <div className="px-4 py-6 space-y-6">
-        {/* Security Status */}
-        <Card className="border-none shadow-md bg-gradient-to-r from-green-50 to-emerald-50">
+      {/* 3. Container "Folha Branca" */}
+      <div className="bg-white rounded-t-3xl px-6 py-6 min-h-screen shadow-[0_-8px_24px_rgba(0,0,0,0.15)]">
+        
+        {/* Security Status - Ajustado para Verde Institucional */}
+        <Card className="border-none shadow-md bg-green-50 mb-6">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <div className="p-3 rounded-xl bg-green-100">
-                <Shield className="w-6 h-6 text-green-600" />
+              <div className="p-3 rounded-xl bg-[#014726]/10">
+                <Shield className="w-6 h-6 text-[#014726]" />
               </div>
               <div className="flex-1">
                 <p className="text-[#2D3748] font-bold">Conta Protegida</p>
-                <p className="text-[#718096] text-sm">Todas as medidas de segurança ativas</p>
+                <p className="text-[#014726]/80 text-sm">Todas as medidas de segurança ativas</p>
               </div>
-              <Badge className="bg-green-500">Ativo</Badge>
+              <Badge className="bg-[#014726] hover:bg-[#026c35]">Ativo</Badge>
             </div>
           </CardContent>
         </Card>
 
         {/* Options */}
-        <div className="space-y-3">
+        <div className="space-y-3 mb-6">
           {securityOptions.map((option, index) => {
             const Icon = option.icon;
             return (
@@ -92,13 +96,13 @@ export default function SecurityPage() {
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
               <div className="p-2 rounded-lg bg-slate-100">
-                <Info className="w-5 h-5 text-slate-600" />
+                <Info className="w-5 h-5 text-[#014726]" />
               </div>
               <div className="flex-1">
                 <p className="text-[#2D3748] font-semibold text-sm">Versão do Aplicativo</p>
                 <p className="text-[#718096] text-xs mt-0.5">1.0.0 (Build 100)</p>
               </div>
-              <Badge variant="outline">Atualizado</Badge>
+              <Badge variant="outline" className="text-[#014726] border-[#014726]/20">Atualizado</Badge>
             </div>
           </CardContent>
         </Card>

@@ -49,33 +49,38 @@ const managementOptions = [
 
 export default function CardManagementPage() {
   return (
-    <div className="min-h-screen bg-slate-50">
-      {/* Header */}
-      <div className="bg-gradient-to-br from-[#4A9B9E] to-[#3D8385] px-4 pt-12 pb-6 rounded-b-3xl">
-        <h1 className="text-white text-2xl font-bold mb-1">Gestão do Cartão</h1>
-        <p className="text-white/80 text-sm">Gerencie todos os aspectos do seu cartão</p>
+    // 1. Fundo Gradiente Verde
+    <div className="min-h-screen bg-gradient-to-b from-[#014726] via-[#026c35] to-[#059641]">
+      
+      {/* 2. Header Institucional */}
+      <div className="px-6 pt-16 pb-8">
+        <h1 className="text-[color:var(--accent-yellow,#C6FF4A)] text-2xl font-extrabold mb-1">Gestão do Cartão</h1>
+        <p className="text-white/90 text-sm">Gerencie todos os aspectos do seu cartão</p>
       </div>
 
-      <div className="px-4 py-6 space-y-3">
-        {managementOptions.map((option, index) => {
-          const Icon = option.icon;
-          return (
-            <Card key={index} className="border-none shadow-sm hover:shadow-md transition-shadow">
-              <CardContent className="p-4">
-                <button className="w-full flex items-center gap-4">
-                  <div className={`p-3 rounded-xl ${option.color}`}>
-                    <Icon className="w-6 h-6" />
-                  </div>
-                  <div className="flex-1 text-left">
-                    <p className="text-[#2D3748] font-semibold">{option.title}</p>
-                    <p className="text-[#718096] text-sm mt-0.5">{option.description}</p>
-                  </div>
-                  <ChevronRight className="w-5 h-5 text-[#718096] flex-shrink-0" />
-                </button>
-              </CardContent>
-            </Card>
-          );
-        })}
+      {/* 3. Container "Folha Branca" */}
+      <div className="bg-white rounded-t-3xl px-6 py-6 min-h-screen shadow-[0_-8px_24px_rgba(0,0,0,0.15)]">
+        <div className="space-y-3">
+          {managementOptions.map((option, index) => {
+            const Icon = option.icon;
+            return (
+              <Card key={index} className="border-none shadow-sm hover:shadow-md transition-shadow">
+                <CardContent className="p-4">
+                  <button className="w-full flex items-center gap-4">
+                    <div className={`p-3 rounded-xl ${option.color}`}>
+                      <Icon className="w-6 h-6" />
+                    </div>
+                    <div className="flex-1 text-left">
+                      <p className="text-[#2D3748] font-semibold">{option.title}</p>
+                      <p className="text-[#718096] text-sm mt-0.5">{option.description}</p>
+                    </div>
+                    <ChevronRight className="w-5 h-5 text-[#718096] flex-shrink-0" />
+                  </button>
+                </CardContent>
+              </Card>
+            );
+          })}
+        </div>
       </div>
     </div>
   );

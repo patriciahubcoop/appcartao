@@ -20,7 +20,6 @@ export default function ProfilePage() {
   const { data: user } = useQuery({
     queryKey: ['currentUser'],
     queryFn: async () => {
-      // Mock de usuário local
       return {
         email: 'demo@hubcoop.com',
         full_name: 'João Silva Santos',
@@ -32,7 +31,6 @@ export default function ProfilePage() {
   const { data: profile, isLoading } = useQuery({
     queryKey: ['userProfile'],
     queryFn: async () => {
-      // Mock de perfil local
       return {
         full_name: 'João Silva Santos',
         birth_date: '1985-03-15',
@@ -45,7 +43,6 @@ export default function ProfilePage() {
         whatsapp_notifications: true
       };
     },
-
     enabled: !!user,
   });
 
@@ -60,10 +57,7 @@ export default function ProfilePage() {
   if (isLoading) {
     return (
       <div className="min-h-screen bg-slate-50">
-        <div className="bg-gradient-to-br from-[#4A9B9E] to-[#3D8385] px-4 pt-12 pb-6 rounded-b-3xl">
-          <Skeleton className="h-8 w-48 bg-white/20 mb-2" />
-          <Skeleton className="h-4 w-64 bg-white/20" />
-        </div>
+        <Skeleton className="h-32 w-full" />
         <div className="px-4 py-6 space-y-4">
           <Skeleton className="h-32 w-full rounded-2xl" />
           <Skeleton className="h-64 w-full rounded-2xl" />
@@ -73,19 +67,24 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      {/* Header */}
-      <div className="bg-gradient-to-br from-[#4A9B9E] to-[#3D8385] px-4 pt-12 pb-6 rounded-b-3xl">
-        <h1 className="text-white text-2xl font-bold mb-1">Meu Perfil</h1>
-        <p className="text-white/80 text-sm">Gerencie suas informações pessoais</p>
+    // 1. Fundo Gradiente Verde
+    <div className="min-h-screen bg-gradient-to-b from-[#014726] via-[#026c35] to-[#059641]">
+      
+      {/* 2. Header Institucional */}
+      <div className="px-6 pt-16 pb-8">
+        <h1 className="text-[color:var(--accent-yellow,#C6FF4A)] text-2xl font-extrabold mb-1">Meu Perfil</h1>
+        <p className="text-white/90 text-sm">Gerencie suas informações pessoais</p>
       </div>
 
-      <div className="px-4 py-6 space-y-6">
+      {/* 3. Container "Folha Branca" */}
+      <div className="bg-white rounded-t-3xl px-6 py-6 min-h-screen shadow-[0_-8px_24px_rgba(0,0,0,0.15)]">
+        
         {/* Profile Avatar */}
-        <Card className="border-none shadow-md">
+        <Card className="border-none shadow-md mb-6">
           <CardContent className="p-6">
             <div className="flex items-center gap-4">
-              <div className="w-20 h-20 rounded-full bg-gradient-to-br from-[#4A9B9E] to-[#3D8385] flex items-center justify-center">
+              {/* Avatar com Gradiente Verde */}
+              <div className="w-20 h-20 rounded-full bg-gradient-to-br from-[#014726] to-[#059641] flex items-center justify-center">
                 <User className="w-10 h-10 text-white" />
               </div>
               <div className="flex-1">
@@ -93,7 +92,7 @@ export default function ProfilePage() {
                   {profile?.full_name || user?.full_name}
                 </h2>
                 <p className="text-[#718096] text-sm mt-1">{user?.email}</p>
-                <Badge className="mt-2 bg-[#4A9B9E]">
+                <Badge className="mt-2 bg-[#014726] hover:bg-[#026c35]">
                   {user?.role === 'admin' ? 'Administrador' : 'Usuário'}
                 </Badge>
               </div>
@@ -101,126 +100,131 @@ export default function ProfilePage() {
           </CardContent>
         </Card>
 
-        {/* Profile Information */}
-        <div>
-          <h3 className="text-[#2D3748] font-bold mb-3 px-1">Informações Pessoais</h3>
-          <Card className="border-none shadow-md">
-            <CardContent className="p-0">
-              {profileFields.map((field, index) => {
-                const Icon = field.icon;
-                return (
-                  <div
-                    key={index}
-                    className={`flex items-center gap-4 p-4 ${
-                      index !== profileFields.length - 1 ? 'border-b border-slate-100' : ''
-                    }`}
-                  >
-                    <div className="p-2 rounded-lg bg-[#4A9B9E]/10 text-[#4A9B9E]">
-                      <Icon className="w-5 h-5" />
+        <div className="space-y-6">
+          {/* Profile Information */}
+          <div>
+            <h3 className="text-[#2D3748] font-bold mb-3 px-1">Informações Pessoais</h3>
+            <Card className="border-none shadow-md">
+              <CardContent className="p-0">
+                {profileFields.map((field, index) => {
+                  const Icon = field.icon;
+                  return (
+                    <div
+                      key={index}
+                      className={`flex items-center gap-4 p-4 ${
+                        index !== profileFields.length - 1 ? 'border-b border-slate-100' : ''
+                      }`}
+                    >
+                      {/* Ícones em Verde */}
+                      <div className="p-2 rounded-lg bg-[#014726]/10 text-[#014726]">
+                        <Icon className="w-5 h-5" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-[#718096] text-xs">{field.label}</p>
+                        <p className="text-[#2D3748] font-semibold mt-0.5 truncate">
+                          {field.value}
+                        </p>
+                      </div>
+                      {field.editable && (
+                        <Edit className="w-4 h-4 text-[#718096] flex-shrink-0" />
+                      )}
                     </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-[#718096] text-xs">{field.label}</p>
-                      <p className="text-[#2D3748] font-semibold mt-0.5 truncate">
-                        {field.value}
-                      </p>
-                    </div>
-                    {field.editable && (
-                      <Edit className="w-4 h-4 text-[#718096] flex-shrink-0" />
-                    )}
+                  );
+                })}
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Security Settings */}
+          <div>
+            <h3 className="text-[#2D3748] font-bold mb-3 px-1">Segurança</h3>
+            <Card className="border-none shadow-md">
+              <CardContent className="p-0">
+                <button className="w-full flex items-center gap-4 p-4 border-b border-slate-100 hover:bg-slate-50 transition-colors">
+                  <div className="p-2 rounded-lg bg-green-50 text-green-600">
+                    <Shield className="w-5 h-5" />
                   </div>
-                );
-              })}
-            </CardContent>
-          </Card>
-        </div>
+                  <div className="flex-1 text-left">
+                    <p className="text-[#2D3748] font-semibold">Face ID</p>
+                    <p className="text-[#718096] text-xs mt-0.5">
+                      {profile?.face_id_enabled ? 'Ativado' : 'Desativado'}
+                    </p>
+                  </div>
+                  <ChevronRight className="w-5 h-5 text-[#718096]" />
+                </button>
+                
+                <button className="w-full flex items-center gap-4 p-4 hover:bg-slate-50 transition-colors">
+                  <div className="p-2 rounded-lg bg-orange-50 text-orange-600">
+                    <Shield className="w-5 h-5" />
+                  </div>
+                  <div className="flex-1 text-left">
+                    <p className="text-[#2D3748] font-semibold">Alterar Senha</p>
+                    <p className="text-[#718096] text-xs mt-0.5">
+                      Última alteração há 30 dias
+                    </p>
+                  </div>
+                  <ChevronRight className="w-5 h-5 text-[#718096]" />
+                </button>
+              </CardContent>
+            </Card>
+          </div>
 
-        {/* Security Settings */}
-        <div>
-          <h3 className="text-[#2D3748] font-bold mb-3 px-1">Segurança</h3>
-          <Card className="border-none shadow-md">
-            <CardContent className="p-0">
-              <button className="w-full flex items-center gap-4 p-4 border-b border-slate-100 hover:bg-slate-50 transition-colors">
-                <div className="p-2 rounded-lg bg-green-50 text-green-600">
-                  <Shield className="w-5 h-5" />
+          {/* Notification Preferences */}
+          <div>
+            <h3 className="text-[#2D3748] font-bold mb-3 px-1">Notificações</h3>
+            <Card className="border-none shadow-md">
+              <CardContent className="p-4 space-y-3">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-[#2D3748] font-semibold text-sm">E-mail</p>
+                    <p className="text-[#718096] text-xs">Receber notificações por e-mail</p>
+                  </div>
+                  {/* Toggle Verde */}
+                  <div className={`w-12 h-6 rounded-full transition-colors ${
+                    profile?.email_notifications ? 'bg-[#014726]' : 'bg-slate-300'
+                  } relative`}>
+                    <div className={`w-5 h-5 rounded-full bg-white absolute top-0.5 transition-transform ${
+                      profile?.email_notifications ? 'right-0.5' : 'left-0.5'
+                    }`} />
+                  </div>
                 </div>
-                <div className="flex-1 text-left">
-                  <p className="text-[#2D3748] font-semibold">Face ID</p>
-                  <p className="text-[#718096] text-xs mt-0.5">
-                    {profile?.face_id_enabled ? 'Ativado' : 'Desativado'}
-                  </p>
+                
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-[#2D3748] font-semibold text-sm">SMS</p>
+                    <p className="text-[#718096] text-xs">Receber notificações por SMS</p>
+                  </div>
+                  <div className={`w-12 h-6 rounded-full transition-colors ${
+                    profile?.sms_notifications ? 'bg-[#014726]' : 'bg-slate-300'
+                  } relative`}>
+                    <div className={`w-5 h-5 rounded-full bg-white absolute top-0.5 transition-transform ${
+                      profile?.sms_notifications ? 'right-0.5' : 'left-0.5'
+                    }`} />
+                  </div>
                 </div>
-                <ChevronRight className="w-5 h-5 text-[#718096]" />
-              </button>
-              
-              <button className="w-full flex items-center gap-4 p-4 hover:bg-slate-50 transition-colors">
-                <div className="p-2 rounded-lg bg-orange-50 text-orange-600">
-                  <Shield className="w-5 h-5" />
+                
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-[#2D3748] font-semibold text-sm">WhatsApp</p>
+                    <p className="text-[#718096] text-xs">Receber notificações pelo WhatsApp</p>
+                  </div>
+                  <div className={`w-12 h-6 rounded-full transition-colors ${
+                    profile?.whatsapp_notifications ? 'bg-[#014726]' : 'bg-slate-300'
+                  } relative`}>
+                    <div className={`w-5 h-5 rounded-full bg-white absolute top-0.5 transition-transform ${
+                      profile?.whatsapp_notifications ? 'right-0.5' : 'left-0.5'
+                    }`} />
+                  </div>
                 </div>
-                <div className="flex-1 text-left">
-                  <p className="text-[#2D3748] font-semibold">Alterar Senha</p>
-                  <p className="text-[#718096] text-xs mt-0.5">
-                    Última alteração há 30 dias
-                  </p>
-                </div>
-                <ChevronRight className="w-5 h-5 text-[#718096]" />
-              </button>
-            </CardContent>
-          </Card>
-        </div>
+              </CardContent>
+            </Card>
+          </div>
 
-        {/* Notification Preferences */}
-        <div>
-          <h3 className="text-[#2D3748] font-bold mb-3 px-1">Notificações</h3>
-          <Card className="border-none shadow-md">
-            <CardContent className="p-4 space-y-3">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-[#2D3748] font-semibold text-sm">E-mail</p>
-                  <p className="text-[#718096] text-xs">Receber notificações por e-mail</p>
-                </div>
-                <div className={`w-12 h-6 rounded-full transition-colors ${
-                  profile?.email_notifications ? 'bg-[#4A9B9E]' : 'bg-slate-300'
-                } relative`}>
-                  <div className={`w-5 h-5 rounded-full bg-white absolute top-0.5 transition-transform ${
-                    profile?.email_notifications ? 'right-0.5' : 'left-0.5'
-                  }`} />
-                </div>
-              </div>
-              
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-[#2D3748] font-semibold text-sm">SMS</p>
-                  <p className="text-[#718096] text-xs">Receber notificações por SMS</p>
-                </div>
-                <div className={`w-12 h-6 rounded-full transition-colors ${
-                  profile?.sms_notifications ? 'bg-[#4A9B9E]' : 'bg-slate-300'
-                } relative`}>
-                  <div className={`w-5 h-5 rounded-full bg-white absolute top-0.5 transition-transform ${
-                    profile?.sms_notifications ? 'right-0.5' : 'left-0.5'
-                  }`} />
-                </div>
-              </div>
-              
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-[#2D3748] font-semibold text-sm">WhatsApp</p>
-                  <p className="text-[#718096] text-xs">Receber notificações pelo WhatsApp</p>
-                </div>
-                <div className={`w-12 h-6 rounded-full transition-colors ${
-                  profile?.whatsapp_notifications ? 'bg-[#4A9B9E]' : 'bg-slate-300'
-                } relative`}>
-                  <div className={`w-5 h-5 rounded-full bg-white absolute top-0.5 transition-transform ${
-                    profile?.whatsapp_notifications ? 'right-0.5' : 'left-0.5'
-                  }`} />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+          {/* Botão de Salvar Verde Escuro */}
+          <Button className="w-full !bg-[#014726] hover:!bg-[#026c35]" size="lg">
+            Salvar Alterações
+          </Button>
         </div>
-
-        <Button className="w-full bg-[#4A9B9E] hover:bg-[#3D8385]" size="lg">
-          Salvar Alterações
-        </Button>
       </div>
     </div>
   );
