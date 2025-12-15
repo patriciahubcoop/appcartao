@@ -1,0 +1,186 @@
+import React, { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Plane, Calendar, DollarSign, Globe } from "lucide-react";
+import { toast } from "sonner";
+
+export default function TravelNoticeDialog({ open, onOpenChange, cardNickname }) {
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [limit, setLimit] = useState("");
+  const [country, setCountry] = useState("");
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    
+    if (!startDate || !endDate || !limit || !country) {
+      toast.error('Preencha todos os campos');
+      return;
+    }
+
+    toast.success(`Aviso de viagem registrado para ${cardNickname}!`);
+    onOpenChange(false);
+    
+    // Reset form
+    setStartDate("");
+    setEndDate("");
+    setLimit("");
+    setCountry("");
+  };
+
+  const popularCountries = [
+    "Estados Unidos",
+    "Canadá",
+    "Reino Unido",
+    "França",
+    "Alemanha",
+    "Itália",
+    "Espanha",
+    "Portugal",
+    "Argentina",
+    "Chile",
+    "México",
+    "Japão",
+    "China",
+    "Austrália"
+  ];
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="max-w-md">
+        <DialogHeader>
+          <div className="flex items-center gap-2 mb-2">
+            <div className="bg-blue-100 p-2 rounded-lg">
+              <Plane className="w-5 h-5 text-blue-600" aria-hidden="true" />
+            </div>
+            <DialogTitle>Aviso de Viagem</DialogTitle>
+          </div>
+          <DialogDescription>
+            Informe seus dados de viagem para evitar bloqueios no cartão {cardNickname}.
+          </DialogDescription>
+        </DialogHeader>
+
+        <form onSubmit={handleSubmit} className="space-y-4 py-4">
+          {/* Start Date */}
+          <div className="space-y-2">
+            <Label htmlFor="start-date" className="text-sm font-semibold text-[#2D3748] flex items-center gap-2">
+              <Calendar className="w-4 h-4 text-[#4A9B9E]" aria-hidden="true" />
+              Data de Início
+            </Label>
+            <Input
+              id="start-date"
+              type="date"
+              value={startDate}
+              onChange={(e) => setStartDate(e.target.value)}
+              min={new Date().toISOString().split('T')[0]}
+              className="h-11"
+              required
+              aria-required="true"
+            />
+          </div>
+
+          {/* End Date */}
+          <div className="space-y-2">
+            <Label htmlFor="end-date" className="text-sm font-semibold text-[#2D3748] flex items-center gap-2">
+              <Calendar className="w-4 h-4 text-[#4A9B9E]" aria-hidden="true" />
+              Data de Retorno
+            </Label>
+            <Input
+              id="end-date"
+              type="date"
+              value={endDate}
+              onChange={(e) => setEndDate(e.target.value)}
+              min={startDate || new Date().toISOString().split('T')[0]}
+              className="h-11"
+              required
+              aria-required="true"
+            />
+          </div>
+
+          {/* Country */}
+          <div className="space-y-2">
+            <Label htmlFor="country" className="text-sm font-semibold text-[#2D3748] flex items-center gap-2">
+              <Globe className="w-4 h-4 text-[#4A9B9E]" aria-hidden="true" />
+              País de Destino
+            </Label>
+            <Select value={country} onValueChange={setCountry} required>
+              <SelectTrigger id="country" className="h-11" aria-required="true">
+                <SelectValue placeholder="Selecione o país" />
+              </SelectTrigger>
+              <SelectContent>
+                {popularCountries.map((countryName) => (
+                  <SelectItem key={countryName} value={countryName}>
+                    {countryName}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* Limit */}
+          <div className="space-y-2">
+            <Label htmlFor="limit" className="text-sm font-semibold text-[#2D3748] flex items-center gap-2">
+              <DollarSign className="w-4 h-4 text-[#4A9B9E]" aria-hidden="true" />
+              Limite Estimado (R$)
+            </Label>
+            <Input
+              id="limit"
+              type="number"
+              value={limit}
+              onChange={(e) => setLimit(e.target.value)}
+              placeholder="Ex: 5000"
+              min="0"
+              step="0.01"
+              className="h-11"
+              required
+              aria-required="true"
+            />
+            <p className="text-xs text-[#718096]">
+              Valor estimado de gastos durante a viagem
+            </p>
+          </div>
+
+          {/* Info Box */}
+          <div className="bg-blue-50 p-3 rounded-lg">
+            <p className="text-xs text-blue-800 leading-relaxed">
+              💡 Seu cartão será liberado automaticamente para uso internacional durante o período informado.
+            </p>
+          </div>
+
+          {/* Buttons */}
+          <div className="flex gap-3 pt-2">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => onOpenChange(false)}
+              className="flex-1"
+            >
+              Cancelar
+            </Button>
+            <Button
+              type="submit"
+              className="flex-1 bg-[#4A9B9E] hover:bg-[#3D8385]"
+            >
+              Confirmar Aviso
+            </Button>
+          </div>
+        </form>
+      </DialogContent>
+    </Dialog>
+  );
+}

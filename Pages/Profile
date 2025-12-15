@@ -1,0 +1,235 @@
+import React from "react";
+import { base44 } from "@/api/base44Client";
+import { useQuery } from "@tanstack/react-query";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Badge } from "@/components/ui/badge";
+import {
+  User,
+  Mail,
+  Phone,
+  Calendar,
+  Smartphone,
+  Shield,
+  Edit,
+  ChevronRight
+} from "lucide-react";
+
+export default function ProfilePage() {
+  const { data: user } = useQuery({
+    queryKey: ['currentUser'],
+    queryFn: async () => {
+      try {
+        return await base44.auth.me();
+      } catch (error) {
+        // Return mock user
+        return {
+          email: 'demo@hubcoop.com',
+          full_name: 'João Silva Santos',
+          role: 'user'
+        };
+      }
+    },
+  });
+
+  const { data: profile, isLoading } = useQuery({
+    queryKey: ['userProfile'],
+    queryFn: async () => {
+      try {
+        const profiles = await base44.entities.UserProfile.filter({ created_by: user?.email });
+        return profiles[0];
+      } catch (error) {
+        // Return mock profile
+        return {
+          full_name: 'João Silva Santos',
+          birth_date: '1985-03-15',
+          phone: '(69) 99876-5432',
+          device_model: 'iPhone 14 Pro',
+          face_id_enabled: true,
+          notifications_enabled: true,
+          email_notifications: true,
+          sms_notifications: true,
+          whatsapp_notifications: true
+        };
+      }
+    },
+    enabled: !!user,
+  });
+
+  const profileFields = [
+    { icon: User, label: "Nome Completo", value: profile?.full_name || user?.full_name, editable: true },
+    { icon: Mail, label: "E-mail", value: user?.email, editable: false },
+    { icon: Phone, label: "Celular", value: profile?.phone || "Não informado", editable: true },
+    { icon: Calendar, label: "Data de Nascimento", value: profile?.birth_date || "Não informado", editable: true },
+    { icon: Smartphone, label: "Modelo do Aparelho", value: profile?.device_model || "Não informado", editable: true },
+  ];
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-slate-50">
+        <div className="bg-gradient-to-br from-[#4A9B9E] to-[#3D8385] px-4 pt-12 pb-6 rounded-b-3xl">
+          <Skeleton className="h-8 w-48 bg-white/20 mb-2" />
+          <Skeleton className="h-4 w-64 bg-white/20" />
+        </div>
+        <div className="px-4 py-6 space-y-4">
+          <Skeleton className="h-32 w-full rounded-2xl" />
+          <Skeleton className="h-64 w-full rounded-2xl" />
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-slate-50">
+      {/* Header */}
+      <div className="bg-gradient-to-br from-[#4A9B9E] to-[#3D8385] px-4 pt-12 pb-6 rounded-b-3xl">
+        <h1 className="text-white text-2xl font-bold mb-1">Meu Perfil</h1>
+        <p className="text-white/80 text-sm">Gerencie suas informações pessoais</p>
+      </div>
+
+      <div className="px-4 py-6 space-y-6">
+        {/* Profile Avatar */}
+        <Card className="border-none shadow-md">
+          <CardContent className="p-6">
+            <div className="flex items-center gap-4">
+              <div className="w-20 h-20 rounded-full bg-gradient-to-br from-[#4A9B9E] to-[#3D8385] flex items-center justify-center">
+                <User className="w-10 h-10 text-white" />
+              </div>
+              <div className="flex-1">
+                <h2 className="text-[#2D3748] text-xl font-bold">
+                  {profile?.full_name || user?.full_name}
+                </h2>
+                <p className="text-[#718096] text-sm mt-1">{user?.email}</p>
+                <Badge className="mt-2 bg-[#4A9B9E]">
+                  {user?.role === 'admin' ? 'Administrador' : 'Usuário'}
+                </Badge>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Profile Information */}
+        <div>
+          <h3 className="text-[#2D3748] font-bold mb-3 px-1">Informações Pessoais</h3>
+          <Card className="border-none shadow-md">
+            <CardContent className="p-0">
+              {profileFields.map((field, index) => {
+                const Icon = field.icon;
+                return (
+                  <div
+                    key={index}
+                    className={`flex items-center gap-4 p-4 ${
+                      index !== profileFields.length - 1 ? 'border-b border-slate-100' : ''
+                    }`}
+                  >
+                    <div className="p-2 rounded-lg bg-[#4A9B9E]/10 text-[#4A9B9E]">
+                      <Icon className="w-5 h-5" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-[#718096] text-xs">{field.label}</p>
+                      <p className="text-[#2D3748] font-semibold mt-0.5 truncate">
+                        {field.value}
+                      </p>
+                    </div>
+                    {field.editable && (
+                      <Edit className="w-4 h-4 text-[#718096] flex-shrink-0" />
+                    )}
+                  </div>
+                );
+              })}
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Security Settings */}
+        <div>
+          <h3 className="text-[#2D3748] font-bold mb-3 px-1">Segurança</h3>
+          <Card className="border-none shadow-md">
+            <CardContent className="p-0">
+              <button className="w-full flex items-center gap-4 p-4 border-b border-slate-100 hover:bg-slate-50 transition-colors">
+                <div className="p-2 rounded-lg bg-green-50 text-green-600">
+                  <Shield className="w-5 h-5" />
+                </div>
+                <div className="flex-1 text-left">
+                  <p className="text-[#2D3748] font-semibold">Face ID</p>
+                  <p className="text-[#718096] text-xs mt-0.5">
+                    {profile?.face_id_enabled ? 'Ativado' : 'Desativado'}
+                  </p>
+                </div>
+                <ChevronRight className="w-5 h-5 text-[#718096]" />
+              </button>
+              
+              <button className="w-full flex items-center gap-4 p-4 hover:bg-slate-50 transition-colors">
+                <div className="p-2 rounded-lg bg-orange-50 text-orange-600">
+                  <Shield className="w-5 h-5" />
+                </div>
+                <div className="flex-1 text-left">
+                  <p className="text-[#2D3748] font-semibold">Alterar Senha</p>
+                  <p className="text-[#718096] text-xs mt-0.5">
+                    Última alteração há 30 dias
+                  </p>
+                </div>
+                <ChevronRight className="w-5 h-5 text-[#718096]" />
+              </button>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Notification Preferences */}
+        <div>
+          <h3 className="text-[#2D3748] font-bold mb-3 px-1">Notificações</h3>
+          <Card className="border-none shadow-md">
+            <CardContent className="p-4 space-y-3">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-[#2D3748] font-semibold text-sm">E-mail</p>
+                  <p className="text-[#718096] text-xs">Receber notificações por e-mail</p>
+                </div>
+                <div className={`w-12 h-6 rounded-full transition-colors ${
+                  profile?.email_notifications ? 'bg-[#4A9B9E]' : 'bg-slate-300'
+                } relative`}>
+                  <div className={`w-5 h-5 rounded-full bg-white absolute top-0.5 transition-transform ${
+                    profile?.email_notifications ? 'right-0.5' : 'left-0.5'
+                  }`} />
+                </div>
+              </div>
+              
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-[#2D3748] font-semibold text-sm">SMS</p>
+                  <p className="text-[#718096] text-xs">Receber notificações por SMS</p>
+                </div>
+                <div className={`w-12 h-6 rounded-full transition-colors ${
+                  profile?.sms_notifications ? 'bg-[#4A9B9E]' : 'bg-slate-300'
+                } relative`}>
+                  <div className={`w-5 h-5 rounded-full bg-white absolute top-0.5 transition-transform ${
+                    profile?.sms_notifications ? 'right-0.5' : 'left-0.5'
+                  }`} />
+                </div>
+              </div>
+              
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-[#2D3748] font-semibold text-sm">WhatsApp</p>
+                  <p className="text-[#718096] text-xs">Receber notificações pelo WhatsApp</p>
+                </div>
+                <div className={`w-12 h-6 rounded-full transition-colors ${
+                  profile?.whatsapp_notifications ? 'bg-[#4A9B9E]' : 'bg-slate-300'
+                } relative`}>
+                  <div className={`w-5 h-5 rounded-full bg-white absolute top-0.5 transition-transform ${
+                    profile?.whatsapp_notifications ? 'right-0.5' : 'left-0.5'
+                  }`} />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        <Button className="w-full bg-[#4A9B9E] hover:bg-[#3D8385]" size="lg">
+          Salvar Alterações
+        </Button>
+      </div>
+    </div>
+  );
+}

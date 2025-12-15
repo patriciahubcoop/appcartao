@@ -1,0 +1,98 @@
+import React from "react";
+import { Link } from "react-router-dom";
+import { createPageUrl } from "@/utils";
+import { Card, CardContent } from "@/components/ui/card";
+import {
+  User,
+  DollarSign,
+  CreditCard,
+  FileText,
+  Shield,
+  ChevronRight,
+  Settings,
+  Bell,
+  Phone,
+  HelpCircle,
+  FileCheck,
+  LogOut,
+  Trash2,
+  Info
+} from "lucide-react";
+
+const menuSections = [
+  {
+    title: "Conta",
+    items: [
+      { icon: User, label: "Meu Perfil", page: "Profile", description: "Dados pessoais e configurações" },
+      { icon: Bell, label: "Notificações", page: "Notifications", description: "Gerencie suas notificações" }
+    ]
+  },
+  {
+    title: "Serviços",
+    items: [
+      { icon: DollarSign, label: "Cotação do Dólar", page: "DollarQuote", description: "Simule conversões de moeda" },
+      { icon: CreditCard, label: "Gestão do Cartão", page: "CardManagement", description: "Gerencie seus cartões" },
+      { icon: FileText, label: "Faturas e Pagamentos", page: "InvoiceManagement", description: "Histórico e parcelamentos" }
+    ]
+  },
+  {
+    title: "Segurança e Ajuda",
+    items: [
+      { icon: Shield, label: "Segurança", page: "Security", description: "Configurações de segurança" },
+      { icon: Phone, label: "Central de Atendimento", page: "Support", description: "Entre em contato conosco" },
+      { icon: HelpCircle, label: "Perguntas Frequentes", page: "FAQ", description: "Tire suas dúvidas" },
+      { icon: FileCheck, label: "Termos e Condições", page: "Terms", description: "Leia nossos termos" }
+    ]
+  },
+  {
+    title: "Sistema",
+    items: [
+      { icon: Info, label: "Sobre o App", action: "about", description: "Versão 1.0.0" },
+      { icon: LogOut, label: "Sair", action: "logout", description: "Encerrar sessão", color: "text-orange-600" },
+      { icon: Trash2, label: "Excluir Conta", action: "delete", description: "Remover todos os dados", color: "text-red-600" }
+    ]
+  }
+];
+
+export default function MorePage() {
+  return (
+    <div className="min-h-screen bg-slate-50">
+      {/* Header */}
+      <div className="bg-[#4A9B9E] px-6 pt-12 pb-8">
+        <h1 className="text-white text-2xl font-bold">Menu</h1>
+      </div>
+
+      <div className="bg-white px-6 py-6 min-h-screen space-y-1">
+        {menuSections.map((section) => (
+          <div key={section.title}>
+            {section.items.map((item, itemIndex) => {
+              const Icon = item.icon;
+              return item.page ? (
+                <Link key={itemIndex} to={createPageUrl(item.page)}>
+                  <button className="w-full flex items-center justify-between p-4 hover:bg-slate-50 rounded-lg transition-colors">
+                    <div className="flex items-center gap-3">
+                      <Icon className={`w-5 h-5 ${item.color || 'text-[#2D3748]'}`} aria-hidden="true" />
+                      <span className={`font-medium ${item.color || 'text-[#2D3748]'}`}>{item.label}</span>
+                    </div>
+                    <ChevronRight className="w-5 h-5 text-[#718096]" aria-hidden="true" />
+                  </button>
+                </Link>
+              ) : (
+                <button
+                  key={itemIndex}
+                  className="w-full flex items-center justify-between p-4 hover:bg-slate-50 rounded-lg transition-colors"
+                >
+                  <div className="flex items-center gap-3">
+                    <Icon className={`w-5 h-5 ${item.color || 'text-[#2D3748]'}`} aria-hidden="true" />
+                    <span className={`font-medium ${item.color || 'text-[#2D3748]'}`}>{item.label}</span>
+                  </div>
+                  <ChevronRight className="w-5 h-5 text-[#718096]" aria-hidden="true" />
+                </button>
+              );
+            })}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}

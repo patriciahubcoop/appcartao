@@ -1,0 +1,78 @@
+{
+  "name": "Transaction",
+  "type": "object",
+  "properties": {
+    "card_id": {
+      "type": "string",
+      "description": "ID do cart\u00e3o"
+    },
+    "merchant_name": {
+      "type": "string",
+      "description": "Nome do estabelecimento"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "alimentacao",
+        "transporte",
+        "saude",
+        "educacao",
+        "lazer",
+        "vestuario",
+        "tecnologia",
+        "combustivel",
+        "viagem",
+        "outros"
+      ],
+      "description": "Categoria da transa\u00e7\u00e3o"
+    },
+    "amount": {
+      "type": "number",
+      "description": "Valor da transa\u00e7\u00e3o"
+    },
+    "transaction_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Data da transa\u00e7\u00e3o"
+    },
+    "transaction_type": {
+      "type": "string",
+      "enum": [
+        "debit",
+        "credit",
+        "installment"
+      ],
+      "description": "Tipo de transa\u00e7\u00e3o"
+    },
+    "installments": {
+      "type": "number",
+      "default": 1,
+      "description": "N\u00famero de parcelas"
+    },
+    "current_installment": {
+      "type": "number",
+      "default": 1,
+      "description": "Parcela atual"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "completed",
+        "cancelled",
+        "disputed"
+      ],
+      "default": "completed"
+    },
+    "description": {
+      "type": "string",
+      "description": "Descri\u00e7\u00e3o adicional"
+    }
+  },
+  "required": [
+    "card_id",
+    "merchant_name",
+    "amount",
+    "transaction_date"
+  ]
+}

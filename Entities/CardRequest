@@ -1,0 +1,55 @@
+{
+  "name": "CardRequest",
+  "type": "object",
+  "properties": {
+    "card_id": {
+      "type": "string",
+      "description": "ID do cart\u00e3o relacionado (se aplic\u00e1vel)"
+    },
+    "request_type": {
+      "type": "string",
+      "enum": [
+        "new_card",
+        "second_copy",
+        "replacement",
+        "additional_card"
+      ],
+      "description": "Tipo de solicita\u00e7\u00e3o"
+    },
+    "card_type": {
+      "type": "string",
+      "enum": [
+        "credit",
+        "debit"
+      ],
+      "description": "Tipo de cart\u00e3o solicitado"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "approved",
+        "rejected",
+        "delivered"
+      ],
+      "default": "pending",
+      "description": "Status da solicita\u00e7\u00e3o"
+    },
+    "reason": {
+      "type": "string",
+      "description": "Motivo da solicita\u00e7\u00e3o"
+    },
+    "delivery_address": {
+      "type": "string",
+      "description": "Endere\u00e7o de entrega"
+    },
+    "tracking_code": {
+      "type": "string",
+      "description": "C\u00f3digo de rastreamento"
+    }
+  },
+  "required": [
+    "request_type",
+    "card_type"
+  ]
+}

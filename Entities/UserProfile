@@ -1,0 +1,46 @@
+{
+  "name": "UserProfile",
+  "type": "object",
+  "properties": {
+    "full_name": {
+      "type": "string",
+      "description": "Nome completo"
+    },
+    "birth_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Data de nascimento"
+    },
+    "phone": {
+      "type": "string",
+      "description": "N\u00famero do celular"
+    },
+    "device_model": {
+      "type": "string",
+      "description": "Modelo do aparelho"
+    },
+    "face_id_enabled": {
+      "type": "boolean",
+      "default": false,
+      "description": "Face ID habilitado"
+    },
+    "notifications_enabled": {
+      "type": "boolean",
+      "default": true,
+      "description": "Notifica\u00e7\u00f5es habilitadas"
+    },
+    "email_notifications": {
+      "type": "boolean",
+      "default": true
+    },
+    "sms_notifications": {
+      "type": "boolean",
+      "default": true
+    },
+    "whatsapp_notifications": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "required": []
+}

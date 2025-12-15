@@ -1,0 +1,104 @@
+{
+  "name": "Card",
+  "type": "object",
+  "properties": {
+    "nickname": {
+      "type": "string",
+      "description": "Apelido do cart\u00e3o"
+    },
+    "card_type": {
+      "type": "string",
+      "enum": [
+        "credit",
+        "debit"
+      ],
+      "default": "credit",
+      "description": "Tipo do cart\u00e3o"
+    },
+    "holder_type": {
+      "type": "string",
+      "enum": [
+        "individual",
+        "business"
+      ],
+      "default": "individual",
+      "description": "Tipo de titular"
+    },
+    "holder_name": {
+      "type": "string",
+      "description": "Nome do titular"
+    },
+    "cpf_cnpj": {
+      "type": "string",
+      "description": "CPF ou CNPJ do titular"
+    },
+    "card_number_last4": {
+      "type": "string",
+      "description": "\u00daltimos 4 d\u00edgitos do cart\u00e3o"
+    },
+    "total_limit": {
+      "type": "number",
+      "description": "Limite total do cart\u00e3o"
+    },
+    "available_limit": {
+      "type": "number",
+      "description": "Limite dispon\u00edvel"
+    },
+    "current_invoice_amount": {
+      "type": "number",
+      "description": "Valor da fatura atual"
+    },
+    "due_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Data de vencimento"
+    },
+    "best_purchase_date": {
+      "type": "string",
+      "description": "Melhor data de compra"
+    },
+    "billing_period_start": {
+      "type": "string",
+      "format": "date",
+      "description": "In\u00edcio do per\u00edodo de faturamento"
+    },
+    "billing_period_end": {
+      "type": "string",
+      "format": "date",
+      "description": "Fim do per\u00edodo de faturamento"
+    },
+    "is_blocked": {
+      "type": "boolean",
+      "default": false,
+      "description": "Cart\u00e3o bloqueado"
+    },
+    "contactless_enabled": {
+      "type": "boolean",
+      "default": true,
+      "description": "Compra por aproxima\u00e7\u00e3o habilitada"
+    },
+    "card_image_url": {
+      "type": "string",
+      "description": "URL da imagem personalizada do cart\u00e3o"
+    },
+    "points_balance": {
+      "type": "number",
+      "default": 0,
+      "description": "Saldo de pontos"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "blocked",
+        "cancelled"
+      ],
+      "default": "active"
+    }
+  },
+  "required": [
+    "nickname",
+    "holder_name",
+    "card_type"
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "name": "DollarQuote",
+  "type": "object",
+  "properties": {
+    "quote_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Data da cota\u00e7\u00e3o"
+    },
+    "buy_rate": {
+      "type": "number",
+      "description": "Taxa de compra"
+    },
+    "sell_rate": {
+      "type": "number",
+      "description": "Taxa de venda"
+    },
+    "amount_brl": {
+      "type": "number",
+      "description": "Valor em reais"
+    },
+    "amount_usd": {
+      "type": "number",
+      "description": "Valor em d\u00f3lares"
+    },
+    "simulation_type": {
+      "type": "string",
+      "enum": [
+        "brl_to_usd",
+        "usd_to_brl"
+      ],
+      "description": "Tipo de simula\u00e7\u00e3o"
+    }
+  },
+  "required": [
+    "quote_date",
+    "buy_rate",
+    "sell_rate"
+  ]
+}
