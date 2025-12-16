@@ -132,12 +132,12 @@ export default function HomePage() {
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full border-2 border-[color:var(--accent-yellow,#C6FF4A)] overflow-hidden">
-  <img
-    src={userAvatar}
-    alt="Foto de perfil de João"
-    className="w-full h-full object-cover"
-  />
-</div>
+              <img
+                src={userAvatar}
+                alt="Foto de perfil de João"
+                className="w-full h-full object-cover"
+              />
+            </div>
             <span className="text-[color:var(--accent-yellow,#C6FF4A)] font-semibold tracking-wide">Olá, João!</span>
           </div>
 
@@ -250,33 +250,49 @@ export default function HomePage() {
         <div className="mt-8">
           <h3 className="text-[#1F2933] font-bold mb-4">Descubra mais</h3>
           
-          <Link to="/services">
-          <Card className="border-none shadow-sm mb-3 bg-gradient-to-br from-[#6AD34B] to-[#00953A]">
-            <CardContent className="p-4">
-              <div className="flex items-center justify-between">
-                <div className="flex-1">
-                  <p className="text-white font-semibold mb-1">Seguro de vida</p>
-                  <p className="text-white/90 text-sm">Cuide de quem você ama de um jeito simples</p>
-                </div>
-                <ChevronRight className="w-5 h-5 text-white ml-3" aria-hidden="true" />
-              </div>
-            </CardContent>
-          </Card>
-          </Link>
-
-          <Link to="/dollar-quote">
-            <Card className="border-none shadow-sm bg-gradient-to-br from-[#A6FF4E] to-[#00953A]">
-              <CardContent className="p-4">
-                <div className="flex items-center justify-between">
-                  <div className="flex-1">
-                    <p className="text-white font-semibold mb-1">Câmbio</p>
-                    <p className="text-white/90 text-sm">Simule a cotação do dólar</p>
+          <div className="flex flex-col gap-3">
+            <Link to="/services">
+              <Card className="border-none shadow-sm bg-gradient-to-br from-[#6AD34B] to-[#00953A]">
+                <CardContent className="p-4">
+                  <div className="flex items-center justify-between">
+                    <div className="flex-1">
+                      <p className="text-white font-semibold mb-1">Seguro de vida</p>
+                      <p className="text-white/90 text-sm">Cuide de quem você ama de um jeito simples</p>
+                    </div>
+                    <ChevronRight className="w-5 h-5 text-white ml-3" aria-hidden="true" />
                   </div>
-                  <ChevronRight className="w-5 h-5 text-white ml-3" aria-hidden="true" />
-                </div>
-              </CardContent>
-            </Card>
-          </Link>
+                </CardContent>
+              </Card>
+            </Link>
+
+            <Link to="/dollar-quote">
+              <Card className="border-none shadow-sm bg-gradient-to-br from-[#A6FF4E] to-[#00953A]">
+                <CardContent className="p-4">
+                  <div className="flex items-center justify-between">
+                    <div className="flex-1">
+                      <p className="text-white font-semibold mb-1">Câmbio</p>
+                      <p className="text-white/90 text-sm">Simule a cotação do dólar</p>
+                    </div>
+                    <ChevronRight className="w-5 h-5 text-white ml-3" aria-hidden="true" />
+                  </div>
+                </CardContent>
+              </Card>
+            </Link>
+
+            <Link to="/limits">
+              <Card className="border-none shadow-sm bg-gradient-to-br from-[#6AD34B] to-[#00953A]">
+                <CardContent className="p-4">
+                  <div className="flex items-center justify-between">
+                    <div className="flex-1">
+                      <p className="text-white font-semibold mb-1">Limites</p>
+                      <p className="text-white/90 text-sm">Gerencie seu limite!</p>
+                    </div>
+                    <ChevronRight className="w-5 h-5 text-white ml-3" aria-hidden="true" />
+                  </div>
+                </CardContent>
+              </Card>
+            </Link>
+          </div>
         </div>
       </div>
     </div>
