@@ -11,7 +11,8 @@ import {
   CreditCard,
   Receipt,
   QrCode,
-  Users // <--- ADICIONADO AQUI
+  Users, 
+  Shield
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -82,13 +83,16 @@ export default function HomePage() {
     { icon: QrCode, label: "Pix com cartão", path: "/pix-card" },
     { icon: CreditCard, label: "Consultar Limites", path: "/limits" },
     { icon: Receipt, label: "Pagar", path: "/invoices" },
-    { icon: Smartphone, label: "Recarga", path: null },
+    { icon: Smartphone, label: "Recarga", path: "/mobilerecharge" },
+    
   ];
 
   const menuItems = [
     { icon: CreditCard, label: "Meus cartões", path: "/cards" },
     { icon: CreditCard, label: "Meus limites", path: "/limits" },
-    { icon: Users, label: "Indicar amigos", page: null } 
+    { icon: CreditCard, label: "Meus pontos", path: "/loyalty" },
+    { icon: Shield, label: "Meus serviços", path: "/services" },
+    { icon: Users, label: "Indicar amigos", path: "/referral" } 
   ];
 
   if (cardsLoading) {
@@ -240,7 +244,8 @@ export default function HomePage() {
         {/* Discover More */}
         <div className="mt-8">
           <h3 className="text-[#1F2933] font-bold mb-4">Descubra mais</h3>
-
+          
+          <Link to="/services">
           <Card className="border-none shadow-sm mb-3 bg-gradient-to-br from-[#6AD34B] to-[#00953A]">
             <CardContent className="p-4">
               <div className="flex items-center justify-between">
@@ -252,6 +257,7 @@ export default function HomePage() {
               </div>
             </CardContent>
           </Card>
+          </Link>
 
           <Link to="/dollar-quote">
             <Card className="border-none shadow-sm bg-gradient-to-br from-[#A6FF4E] to-[#00953A]">

@@ -19,6 +19,11 @@ import Security from './Pages/Security.jsx'
 import CardManagement from './Pages/CardManagement.jsx'
 import DollarQuote from './Pages/DollarQuote'
 import Welcome from './Pages/Welcome.jsx'
+import Loyalty from './Pages/Loyalty.jsx'
+import Services from './Pages/Services.jsx'
+import SalaryPortability from './Pages/SalaryPortability.jsx'
+import MobileRecharge from './Pages/MobileRecharge.jsx'
+import Referral from './Pages/Referral.jsx'
 
 import './index.css' 
 
@@ -47,6 +52,11 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           <Route path="/security" element={<Security />} />
           <Route path="/dollar-quote" element={<DollarQuote />} />
           <Route path="/more" element={<More />} />
+          <Route path="/loyalty" element={<Loyalty />} />
+          <Route path="/services" element={<Services/>} />
+          <Route path="/salary-portability" element={<SalaryPortability />} />
+          <Route path="/mobilerecharge" element={<MobileRecharge />} />
+          <Route path="/referral" element={<Referral />} />
 
           {/* Rota coringa (404 simples) */}
           <Route path="*" element={<Home />} />

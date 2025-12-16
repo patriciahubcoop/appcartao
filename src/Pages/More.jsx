@@ -16,8 +16,12 @@ import {
   FileCheck,
   LogOut,
   Trash2,
-  Info
+  Info,
+  Smartphone,
+  User2
 } from "lucide-react";
+import SalaryPortabilityPage from "./SalaryPortability";
+import MobileRechargePage from "./MobileRecharge";
 
 const pageRoutes = {
   Profile: "/profile",
@@ -26,6 +30,10 @@ const pageRoutes = {
   CardManagement: "/cards/manage",
   InvoiceManagement: "/invoices/manage",
   Security: "/security",
+  SalaryPortability: "/salary-portability",
+  MobileRecharge : "/mobilerecharge",
+  Referral : "/referral",
+  Services: "/services"
 };
 
 const menuSections = [
@@ -41,7 +49,10 @@ const menuSections = [
     items: [
       { icon: DollarSign, label: "Cotação do Dólar", page: "DollarQuote", description: "Simule conversões de moeda" },
       { icon: CreditCard, label: "Gestão do Cartão", page: "CardManagement", description: "Gerencie seus cartões" },
-      { icon: FileText, label: "Faturas e Pagamentos", page: "InvoiceManagement", description: "Histórico e parcelamentos" }
+      { icon: FileText, label: "Faturas e Pagamentos", page: "InvoiceManagement", description: "Histórico e parcelamentos" },
+      { icon: Shield, label: "Serviços", page: "Services", description: "Serviços Adicionais" },
+      { icon: Smartphone, label: "Recarga", page: "MobileRecharge", description: "Recarga para celular pré-pago" },
+      { icon: User, label: "Indique Amigos", page: "Referral", description: "Indique amigos e ganhe pontos!" }
     ]
   },
   {

@@ -1,11 +1,9 @@
 import React, { useState } from "react";
-
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   Select,
@@ -17,10 +15,7 @@ import {
 import {
   QrCode,
   CreditCard,
-  ChevronRight,
   AlertCircle,
-  CheckCircle,
-  Copy
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -34,7 +29,6 @@ export default function PixCardPage() {
   const { data: cards, isLoading } = useQuery({
     queryKey: ['cards'],
     queryFn: async () => {
-      // Mock local de cartões
       return [{
         id: '1',
         nickname: 'Cartão Principal',
@@ -76,22 +70,26 @@ export default function PixCardPage() {
   const installmentFee = feeAmount / installmentCount;
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      {/* Header */}
-      <div className="bg-gradient-to-br from-[#4A9B9E] to-[#3D8385] px-6 pt-12 pb-8">
-        <h1 className="text-white text-2xl font-bold mb-2">Pix com Cartão</h1>
-        <p className="text-white/80 text-sm">Pague usando o limite do seu cartão de crédito</p>
+    // 1. Fundo Gradiente Verde (Padrão Home)
+    <div className="min-h-screen bg-gradient-to-b from-[#014726] via-[#026c35] to-[#059641]">
+      
+      {/* 2. Header Institucional */}
+      <div className="px-6 pt-16 pb-8">
+        <h1 className="text-[color:var(--accent-yellow,#C6FF4A)] text-2xl font-extrabold mb-2">Pix com Cartão</h1>
+        <p className="text-white/90 text-sm">Pague usando o limite do seu cartão de crédito</p>
       </div>
 
-      <div className="px-6 py-6 space-y-6">
-        {/* Info Card */}
-        <Card className="border-none shadow-sm bg-blue-50">
+      {/* 3. Container "Folha Branca" */}
+      <div className="bg-white rounded-t-3xl px-6 py-6 min-h-screen shadow-[0_-8px_24px_rgba(0,0,0,0.15)]">
+        
+        {/* Info Card - Ajustado para cores institucionais */}
+        <Card className="border-none shadow-sm bg-green-50 mb-6">
           <CardContent className="p-4">
             <div className="flex gap-3">
-              <AlertCircle className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" aria-hidden="true" />
+              <AlertCircle className="w-5 h-5 text-[#014726] flex-shrink-0 mt-0.5" aria-hidden="true" />
               <div>
-                <p className="text-blue-900 font-semibold text-sm mb-1">Como funciona?</p>
-                <p className="text-blue-800 text-xs leading-relaxed">
+                <p className="text-[#014726] font-bold text-sm mb-1">Como funciona?</p>
+                <p className="text-[#014726]/80 text-xs leading-relaxed">
                   O valor será cobrado na sua fatura do cartão de crédito. É como fazer uma compra normal, mas via Pix.
                 </p>
               </div>
@@ -112,14 +110,14 @@ export default function PixCardPage() {
                   <Skeleton className="h-11 w-full" />
                 ) : (
                   <Select value={selectedCard} onValueChange={setSelectedCard} required>
-                    <SelectTrigger id="card" className="h-11">
+                    <SelectTrigger id="card" className="h-11 border-slate-300">
                       <SelectValue placeholder="Escolha um cartão" />
                     </SelectTrigger>
                     <SelectContent>
                       {activeCards.map((card) => (
                         <SelectItem key={card.id} value={card.id}>
                           <div className="flex items-center gap-2">
-                            <CreditCard className="w-4 h-4" />
+                            <CreditCard className="w-4 h-4 text-[#014726]" />
                             {card.nickname} - **** {card.card_number_last4}
                           </div>
                         </SelectItem>
@@ -145,7 +143,7 @@ export default function PixCardPage() {
                   value={pixKey}
                   onChange={(e) => setPixKey(e.target.value)}
                   placeholder="CPF, CNPJ, e-mail, telefone ou chave aleatória"
-                  className="h-11"
+                  className="h-11 border-slate-300"
                   required
                 />
               </div>
@@ -163,7 +161,7 @@ export default function PixCardPage() {
                   placeholder="0,00"
                   min="0.01"
                   step="0.01"
-                  className="h-11 text-lg"
+                  className="h-11 text-lg border-slate-300"
                   required
                 />
               </div>
@@ -174,7 +172,7 @@ export default function PixCardPage() {
                   Parcelamento
                 </Label>
                 <Select value={installments} onValueChange={setInstallments}>
-                  <SelectTrigger id="installments" className="h-11">
+                  <SelectTrigger id="installments" className="h-11 border-slate-300">
                     <SelectValue placeholder="Selecione" />
                   </SelectTrigger>
                   <SelectContent>
@@ -184,11 +182,7 @@ export default function PixCardPage() {
                     <SelectItem value="4">4x (9% taxa total)</SelectItem>
                     <SelectItem value="5">5x (10,5% taxa total)</SelectItem>
                     <SelectItem value="6">6x (12% taxa total)</SelectItem>
-                    <SelectItem value="7">7x (13,5% taxa total)</SelectItem>
-                    <SelectItem value="8">8x (15% taxa total)</SelectItem>
-                    <SelectItem value="9">9x (16,5% taxa total)</SelectItem>
                     <SelectItem value="10">10x (18% taxa total)</SelectItem>
-                    <SelectItem value="11">11x (19,5% taxa total)</SelectItem>
                     <SelectItem value="12">12x (21% taxa total)</SelectItem>
                   </SelectContent>
                 </Select>
@@ -212,43 +206,23 @@ export default function PixCardPage() {
                         R$ {feeAmount.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
                       </span>
                     </div>
-                    <div className="flex items-center justify-between text-xs">
-                      <span className="text-[#718096]">• Base 3%</span>
-                      <span className="text-[#718096]">
-                        R$ {(baseAmount * baseFeeRate).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
-                      </span>
-                    </div>
-                    <div className="flex items-center justify-between text-xs">
-                      <span className="text-[#718096]">• Parcelamento ({installmentCount}x × 1,5%)</span>
-                      <span className="text-[#718096]">
-                        R$ {(baseAmount * installmentFeeRate * installmentCount).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
-                      </span>
-                    </div>
                     <div className="pt-2 border-t border-slate-300">
                       <div className="flex items-center justify-between">
                         <span className="text-[#2D3748] font-semibold">Total a pagar</span>
-                        <span className="text-[#2D3748] text-lg font-bold">
+                        <span className="text-[#014726] text-lg font-bold">
                           R$ {totalAmount.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
                         </span>
                       </div>
                     </div>
                     {installmentCount > 1 && (
-                      <>
-                        <div className="pt-2 border-t border-slate-200">
-                          <div className="flex items-center justify-between text-sm">
-                            <span className="text-[#718096]">Valor por parcela</span>
-                            <span className="text-[#2D3748] font-semibold">
-                              {installmentCount}x de R$ {installmentValue.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
-                            </span>
-                          </div>
-                          <div className="flex items-center justify-between text-xs mt-1">
-                            <span className="text-[#718096]">Taxa por parcela</span>
-                            <span className="text-orange-600 font-medium">
-                              R$ {installmentFee.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
-                            </span>
-                          </div>
+                      <div className="pt-2 border-t border-slate-200">
+                        <div className="flex items-center justify-between text-sm">
+                          <span className="text-[#718096]">Valor por parcela</span>
+                          <span className="text-[#2D3748] font-semibold">
+                            {installmentCount}x de R$ {installmentValue.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                          </span>
                         </div>
-                      </>
+                      </div>
                     )}
                   </CardContent>
                 </Card>
@@ -265,14 +239,14 @@ export default function PixCardPage() {
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   placeholder="Ex: Pagamento de aluguel"
-                  className="h-11"
+                  className="h-11 border-slate-300"
                 />
               </div>
 
-              {/* Submit Button */}
+              {/* Submit Button - Cor Verde Institucional */}
               <Button
                 type="submit"
-                className="w-full bg-[#4A9B9E] hover:bg-[#3D8385] h-12 text-base font-semibold"
+                className="w-full !bg-[#014726] hover:!bg-[#026c35] h-12 text-base font-semibold"
               >
                 <QrCode className="w-5 h-5 mr-2" aria-hidden="true" />
                 Continuar com Pix
@@ -282,7 +256,7 @@ export default function PixCardPage() {
         </Card>
 
         {/* Recent Pix Transactions */}
-        <div>
+        <div className="mt-6">
           <h3 className="text-[#2D3748] font-bold mb-3 px-1">Transações Recentes via Pix</h3>
           <Card className="border-none shadow-sm">
             <CardContent className="p-8 text-center">
