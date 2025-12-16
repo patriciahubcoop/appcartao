@@ -24,6 +24,10 @@ import Services from './Pages/Services.jsx'
 import SalaryPortability from './Pages/SalaryPortability.jsx'
 import MobileRecharge from './Pages/MobileRecharge.jsx'
 import Referral from './Pages/Referral.jsx'
+import HelpCenter from './Pages/HelpCenter.jsx'
+import FAQ from './Pages/FAQ.jsx'
+import Terms from './Pages/Terms.jsx'
+import AboutApp from './Pages/AboutApp.jsx'
 
 import './index.css' 
 
@@ -57,6 +61,10 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           <Route path="/salary-portability" element={<SalaryPortability />} />
           <Route path="/mobilerecharge" element={<MobileRecharge />} />
           <Route path="/referral" element={<Referral />} />
+          <Route path="/help" element={<HelpCenter />} />
+          <Route path="/faq" element={<FAQ />} />
+          <Route path="/terms" element={<Terms />} />
+          <Route path="/about" element={<AboutApp />} />
 
           {/* Rota coringa (404 simples) */}
           <Route path="*" element={<Home />} />

@@ -33,7 +33,11 @@ const pageRoutes = {
   SalaryPortability: "/salary-portability",
   MobileRecharge : "/mobilerecharge",
   Referral : "/referral",
-  Services: "/services"
+  Services: "/services",
+  HelpCenter: "/help",
+  Faq: "/faq",
+  Terms: "/terms",
+  About: "/about"
 };
 
 const menuSections = [
@@ -59,15 +63,15 @@ const menuSections = [
     title: "Segurança e Ajuda",
     items: [
       { icon: Shield, label: "Segurança", page: "Security", description: "Configurações de segurança" },
-      { icon: Phone, label: "Central de Atendimento", action: "support", description: "Entre em contato conosco" },
-      { icon: HelpCircle, label: "Perguntas Frequentes", action: "faq", description: "Tire suas dúvidas" },
-      { icon: FileCheck, label: "Termos e Condições", action: "terms", description: "Leia nossos termos" }
+      { icon: Phone, label: "Central de Atendimento", page: "HelpCenter", description:  "Entre em contato conosco" },
+      { icon: HelpCircle, label: "Perguntas Frequentes", page: "Faq", description: "Tire suas dúvidas" },
+      { icon: FileCheck, label: "Termos e Condições", page: "Terms", description: "Leia nossos termos" }
     ]
   },
   {
     title: "Sistema",
     items: [
-      { icon: Info, label: "Sobre o App", action: "about", description: "Versão 1.0.0" },
+      { icon: Info, label: "Sobre o App", page: "AboutApp", description: "Versão 1.0.0" },
       { icon: LogOut, label: "Sair", action: "logout", description: "Encerrar sessão", color: "text-orange-600" },
       { icon: Trash2, label: "Excluir Conta", action: "delete", description: "Remover todos os dados", color: "text-red-600" }
     ]
