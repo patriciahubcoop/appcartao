@@ -25,7 +25,7 @@ export default function ProfilePage() {
     queryKey: ['currentUser'],
     queryFn: async () => {
       return {
-        email: 'demo@hubcoop.com',
+        email: 'joao@email.com',
         full_name: 'João Silva Santos',
         role: 'user'
       };
