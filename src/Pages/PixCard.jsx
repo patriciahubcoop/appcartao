@@ -6,16 +6,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
   QrCode,
   CreditCard,
-  AlertCircle,
+  AlertCircle
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -40,232 +33,195 @@ export default function PixCardPage() {
     initialData: [],
   });
 
+  const activeCards = cards.filter(card => card.status === 'active');
+
+  // --- LÓGICA DE CÁLCULO ---
+  const baseAmount = parseFloat(amount) || 0;
+
+  const calculateOption = (numberOfInstallments) => {
+    let rate;
+    if (numberOfInstallments === 1) {
+      rate = 0.0399; 
+    } else {
+      rate = 0.0399 + (0.015 * (numberOfInstallments - 1));
+    }
+
+    const totalFee = baseAmount * rate;
+    const finalTotal = baseAmount + totalFee;
+    const installmentValue = finalTotal / numberOfInstallments;
+
+    return {
+      installmentValue,
+      finalTotal,
+      totalFee,
+      rateDisplay: (rate * 100).toFixed(2) + "%"
+    };
+  };
+
+  const currentSimulation = calculateOption(parseInt(installments));
+
   const handlePixPayment = (e) => {
     e.preventDefault();
-    
     if (!pixKey || !amount || !selectedCard) {
       toast.error('Preencha todos os campos obrigatórios');
       return;
     }
-
-    toast.success('Pagamento via Pix com cartão iniciado!');
+    toast.success(`Pix de R$ ${baseAmount} agendado em ${installments}x!`);
     
-    // Reset form
     setPixKey("");
     setAmount("");
     setDescription("");
+    setInstallments("1");
   };
 
-  const activeCards = cards.filter(card => card.status === 'active');
-
-  // Cálculos
-  const baseAmount = parseFloat(amount) || 0;
-  const installmentCount = parseInt(installments) || 1;
-  const baseFeeRate = 0.03; // 3%
-  const installmentFeeRate = 0.015; // 1,5% por parcela
-  const totalFeeRate = baseFeeRate + (installmentFeeRate * installmentCount);
-  const feeAmount = baseAmount * totalFeeRate;
-  const totalAmount = baseAmount + feeAmount;
-  const installmentValue = totalAmount / installmentCount;
-  const installmentFee = feeAmount / installmentCount;
-
   return (
-    // 1. Fundo Gradiente Verde (Padrão Home)
     <div className="min-h-screen bg-gradient-to-b from-[#014726] via-[#026c35] to-[#059641]">
-      
-      {/* 2. Header Institucional */}
       <div className="px-6 pt-16 pb-8">
         <h1 className="text-[color:var(--accent-yellow,#C6FF4A)] text-2xl font-extrabold mb-2">Pix com Cartão</h1>
-        <p className="text-white/90 text-sm">Pague usando o limite do seu cartão de crédito</p>
+        <p className="text-white/90 text-sm">Use seu limite para fazer transferências</p>
       </div>
 
-      {/* 3. Container "Folha Branca" */}
       <div className="bg-white rounded-t-3xl px-6 py-6 min-h-screen shadow-[0_-8px_24px_rgba(0,0,0,0.15)]">
         
-        {/* Info Card - Ajustado para cores institucionais */}
         <Card className="border-none shadow-sm bg-green-50 mb-6">
           <CardContent className="p-4">
             <div className="flex gap-3">
-              <AlertCircle className="w-5 h-5 text-[#014726] flex-shrink-0 mt-0.5" aria-hidden="true" />
+              <AlertCircle className="w-5 h-5 text-[#014726] flex-shrink-0 mt-0.5" />
               <div>
                 <p className="text-[#014726] font-bold text-sm mb-1">Como funciona?</p>
                 <p className="text-[#014726]/80 text-xs leading-relaxed">
-                  O valor será cobrado na sua fatura do cartão de crédito. É como fazer uma compra normal, mas via Pix.
+                  O valor é transferido na hora via Pix, mas você paga apenas no vencimento da fatura do seu cartão.
                 </p>
               </div>
             </div>
           </CardContent>
         </Card>
 
-        {/* Payment Form */}
         <Card className="border-none shadow-md">
           <CardContent className="p-6">
             <form onSubmit={handlePixPayment} className="space-y-5">
-              {/* Select Card */}
+              
+              {/* Seleção de Cartão (NATIVO) */}
               <div className="space-y-2">
-                <Label htmlFor="card" className="text-sm font-semibold text-[#2D3748]">
-                  Selecione o cartão
-                </Label>
+                <Label className="text-sm font-semibold text-[#2D3748]">Cartão de Crédito</Label>
                 {isLoading ? (
-                  <Skeleton className="h-11 w-full" />
+                  <Skeleton className="h-12 w-full" />
                 ) : (
-                  <Select value={selectedCard} onValueChange={setSelectedCard} required>
-                    <SelectTrigger id="card" className="h-11 border-slate-300">
-                      <SelectValue placeholder="Escolha um cartão" />
-                    </SelectTrigger>
-                    <SelectContent>
+                  <div className="relative">
+                    <CreditCard className="absolute left-3 top-3.5 w-5 h-5 text-gray-500 pointer-events-none" />
+                    <select
+                      value={selectedCard}
+                      onChange={(e) => setSelectedCard(e.target.value)}
+                      className="w-full h-12 pl-10 pr-4 bg-white border border-slate-300 rounded-md text-sm focus:ring-2 focus:ring-[#014726] focus:border-transparent appearance-none"
+                      required
+                    >
+                      <option value="" disabled>Selecione um cartão</option>
                       {activeCards.map((card) => (
-                        <SelectItem key={card.id} value={card.id}>
-                          <div className="flex items-center gap-2">
-                            <CreditCard className="w-4 h-4 text-[#014726]" />
-                            {card.nickname} - **** {card.card_number_last4}
-                          </div>
-                        </SelectItem>
+                        <option key={card.id} value={card.id}>
+                          {card.nickname} (Final {card.card_number_last4})
+                        </option>
                       ))}
-                    </SelectContent>
-                  </Select>
+                    </select>
+                    {/* Seta customizada para o select nativo */}
+                    <div className="absolute right-3 top-4 pointer-events-none">
+                      <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </div>
+                  </div>
                 )}
                 {selectedCard && (
-                  <p className="text-xs text-[#718096] mt-2">
-                    Limite disponível: R$ {activeCards.find(c => c.id === selectedCard)?.available_limit?.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                  <p className="text-xs text-right text-gray-500">
+                    Limite: <strong>R$ {activeCards.find(c => c.id === selectedCard)?.available_limit.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</strong>
                   </p>
                 )}
               </div>
 
-              {/* Pix Key */}
               <div className="space-y-2">
-                <Label htmlFor="pix-key" className="text-sm font-semibold text-[#2D3748]">
-                  Chave Pix ou Código
-                </Label>
+                <Label className="text-sm font-semibold text-[#2D3748]">Chave Pix</Label>
                 <Input
-                  id="pix-key"
-                  type="text"
                   value={pixKey}
                   onChange={(e) => setPixKey(e.target.value)}
-                  placeholder="CPF, CNPJ, e-mail, telefone ou chave aleatória"
-                  className="h-11 border-slate-300"
-                  required
+                  placeholder="CPF, E-mail ou Aleatória"
+                  className="h-12 border-slate-300"
                 />
               </div>
 
-              {/* Amount */}
               <div className="space-y-2">
-                <Label htmlFor="amount" className="text-sm font-semibold text-[#2D3748]">
-                  Valor (R$)
-                </Label>
-                <Input
-                  id="amount"
-                  type="number"
-                  value={amount}
-                  onChange={(e) => setAmount(e.target.value)}
-                  placeholder="0,00"
-                  min="0.01"
-                  step="0.01"
-                  className="h-11 text-lg border-slate-300"
-                  required
-                />
+                <Label className="text-sm font-semibold text-[#2D3748]">Valor da transferência</Label>
+                <div className="relative">
+                  <span className="absolute left-3 top-3 text-gray-500 font-medium">R$</span>
+                  <Input
+                    type="number"
+                    value={amount}
+                    onChange={(e) => setAmount(e.target.value)}
+                    placeholder="0,00"
+                    className="h-12 pl-10 text-lg font-semibold border-slate-300"
+                  />
+                </div>
               </div>
 
-              {/* Installments */}
+              {/* Parcelamento (NATIVO) */}
               <div className="space-y-2">
-                <Label htmlFor="installments" className="text-sm font-semibold text-[#2D3748]">
-                  Parcelamento
-                </Label>
-                <Select value={installments} onValueChange={setInstallments}>
-                  <SelectTrigger id="installments" className="h-11 border-slate-300">
-                    <SelectValue placeholder="Selecione" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="1">À vista (3% taxa)</SelectItem>
-                    <SelectItem value="2">2x (6% taxa total)</SelectItem>
-                    <SelectItem value="3">3x (7,5% taxa total)</SelectItem>
-                    <SelectItem value="4">4x (9% taxa total)</SelectItem>
-                    <SelectItem value="5">5x (10,5% taxa total)</SelectItem>
-                    <SelectItem value="6">6x (12% taxa total)</SelectItem>
-                    <SelectItem value="10">10x (18% taxa total)</SelectItem>
-                    <SelectItem value="12">12x (21% taxa total)</SelectItem>
-                  </SelectContent>
-                </Select>
+                <Label className="text-sm font-semibold text-[#2D3748]">Parcelamento</Label>
+                <div className="relative">
+                  <select
+                    value={installments}
+                    onChange={(e) => setInstallments(e.target.value)}
+                    className="w-full h-12 px-4 bg-white border border-slate-300 rounded-md text-sm focus:ring-2 focus:ring-[#014726] focus:border-transparent appearance-none"
+                  >
+                    {Array.from({ length: 12 }, (_, i) => i + 1).map((n) => {
+                      const sim = calculateOption(n);
+                      return (
+                        <option key={n} value={n.toString()}>
+                          {n}x de {baseAmount > 0 
+                            ? `R$ ${sim.installmentValue.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` 
+                            : '-'} 
+                          {baseAmount > 0 ? ` (Total: R$ ${sim.finalTotal.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })})` : ''}
+                        </option>
+                      );
+                    })}
+                  </select>
+                  <div className="absolute right-3 top-4 pointer-events-none">
+                    <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+                  </div>
+                </div>
               </div>
 
-              {/* Summary */}
-              {amount && parseFloat(amount) > 0 && (
-                <Card className="bg-slate-50 border-slate-200">
-                  <CardContent className="p-4 space-y-2">
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="text-[#718096]">Valor do Pix</span>
-                      <span className="text-[#2D3748] font-medium">
-                        R$ {baseAmount.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+              {baseAmount > 0 && (
+                <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-3">
+                  <div className="flex justify-between text-sm">
+                    <span className="text-gray-500">Valor a enviar</span>
+                    <span className="font-bold text-[#2D3748]">R$ {baseAmount.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span className="text-gray-500">Taxas e Juros ({currentSimulation.rateDisplay})</span>
+                    <span className="text-red-600 font-medium">+ R$ {currentSimulation.totalFee.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span>
+                  </div>
+                  <div className="border-t border-slate-200 my-2 pt-2 flex justify-between items-center">
+                    <span className="text-gray-900 font-bold">Você paga</span>
+                    <div className="text-right">
+                      <span className="block text-lg font-extrabold text-[#014726]">
+                        {installments}x R$ {currentSimulation.installmentValue.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                      </span>
+                      <span className="text-xs text-gray-500">
+                        Total: R$ {currentSimulation.finalTotal.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
                       </span>
                     </div>
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="text-[#718096]">
-                        Taxa ({(totalFeeRate * 100).toFixed(1)}%)
-                      </span>
-                      <span className="text-orange-600 font-medium">
-                        R$ {feeAmount.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
-                      </span>
-                    </div>
-                    <div className="pt-2 border-t border-slate-300">
-                      <div className="flex items-center justify-between">
-                        <span className="text-[#2D3748] font-semibold">Total a pagar</span>
-                        <span className="text-[#014726] text-lg font-bold">
-                          R$ {totalAmount.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
-                        </span>
-                      </div>
-                    </div>
-                    {installmentCount > 1 && (
-                      <div className="pt-2 border-t border-slate-200">
-                        <div className="flex items-center justify-between text-sm">
-                          <span className="text-[#718096]">Valor por parcela</span>
-                          <span className="text-[#2D3748] font-semibold">
-                            {installmentCount}x de R$ {installmentValue.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
-                          </span>
-                        </div>
-                      </div>
-                    )}
-                  </CardContent>
-                </Card>
+                  </div>
+                </div>
               )}
 
-              {/* Description */}
-              <div className="space-y-2">
-                <Label htmlFor="description" className="text-sm font-semibold text-[#2D3748]">
-                  Descrição (opcional)
-                </Label>
-                <Input
-                  id="description"
-                  type="text"
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                  placeholder="Ex: Pagamento de aluguel"
-                  className="h-11 border-slate-300"
-                />
-              </div>
-
-              {/* Submit Button - Cor Verde Institucional */}
               <Button
                 type="submit"
-                className="w-full !bg-[#014726] hover:!bg-[#026c35] h-12 text-base font-semibold"
+                className="w-full !bg-[#014726] hover:!bg-[#026c35] h-14 text-base font-bold shadow-lg mt-4"
               >
-                <QrCode className="w-5 h-5 mr-2" aria-hidden="true" />
-                Continuar com Pix
+                <QrCode className="w-5 h-5 mr-2" />
+                Confirmar Pix
               </Button>
+
             </form>
           </CardContent>
         </Card>
 
-        {/* Recent Pix Transactions */}
-        <div className="mt-6">
-          <h3 className="text-[#2D3748] font-bold mb-3 px-1">Transações Recentes via Pix</h3>
-          <Card className="border-none shadow-sm">
-            <CardContent className="p-8 text-center">
-              <QrCode className="w-12 h-12 text-[#718096] mx-auto mb-3" />
-              <p className="text-[#2D3748] font-medium">Nenhuma transação ainda</p>
-              <p className="text-[#718096] text-sm mt-1">Suas transações via Pix aparecerão aqui</p>
-            </CardContent>
-          </Card>
-        </div>
       </div>
     </div>
   );
