@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import logoCredisis from "../assets/credisis-logo.png";
+import userAvatar from "../assets/avatar.jpg";
 
 import {
   Eye,
@@ -83,7 +84,7 @@ export default function HomePage() {
     { icon: QrCode, label: "Pix com cartão", path: "/pix-card" },
     { icon: CreditCard, label: "Consultar Limites", path: "/limits" },
     { icon: Receipt, label: "Pagar", path: "/invoices" },
-    { icon: Smartphone, label: "Recarga", path: "/mobilerecharge" },
+    { icon: Smartphone, label: "Recarga de celular", path: "/mobilerecharge" },
     
   ];
 
@@ -130,9 +131,13 @@ export default function HomePage() {
       <div className="px-6 pt-16 pb-8 relative">
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-[color:var(--accent-yellow,#C6FF4A)]/90 flex items-center justify-center">
-              <div className="w-6 h-6 rounded-full bg-white/90" />
-            </div>
+            <div className="w-10 h-10 rounded-full border-2 border-[color:var(--accent-yellow,#C6FF4A)] overflow-hidden">
+  <img
+    src={userAvatar}
+    alt="Foto de perfil de João"
+    className="w-full h-full object-cover"
+  />
+</div>
             <span className="text-[color:var(--accent-yellow,#C6FF4A)] font-semibold tracking-wide">Olá, João!</span>
           </div>
 

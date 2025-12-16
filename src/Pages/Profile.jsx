@@ -13,8 +13,12 @@ import {
   Smartphone,
   Shield,
   Edit,
-  ChevronRight
+  ChevronRight,
+  Camera
 } from "lucide-react";
+
+// 1. IMPORTE A FOTO AQUI (Ajuste o nome do arquivo conforme o que você salvou)
+import userAvatar from "../assets/avatar.jpg"; 
 
 export default function ProfilePage() {
   const { data: user } = useQuery({
@@ -40,12 +44,16 @@ export default function ProfilePage() {
         notifications_enabled: true,
         email_notifications: true,
         sms_notifications: true,
-        whatsapp_notifications: true
+        whatsapp_notifications: true,
+        
+        // 2. USE A VARIÁVEL DA FOTO AQUI
+        photo_url: userAvatar 
       };
     },
     enabled: !!user,
   });
 
+  // ... (Restante do código continua igual)
   const profileFields = [
     { icon: User, label: "Nome Completo", value: profile?.full_name || user?.full_name, editable: true },
     { icon: Mail, label: "E-mail", value: user?.email, editable: false },
@@ -67,26 +75,36 @@ export default function ProfilePage() {
   }
 
   return (
-    // 1. Fundo Gradiente Verde
     <div className="min-h-screen bg-gradient-to-b from-[#014726] via-[#026c35] to-[#059641]">
-      
-      {/* 2. Header Institucional */}
       <div className="px-6 pt-16 pb-8">
         <h1 className="text-[color:var(--accent-yellow,#C6FF4A)] text-2xl font-extrabold mb-1">Meu Perfil</h1>
         <p className="text-white/90 text-sm">Gerencie suas informações pessoais</p>
       </div>
 
-      {/* 3. Container "Folha Branca" */}
       <div className="bg-white rounded-t-3xl px-6 py-6 min-h-screen shadow-[0_-8px_24px_rgba(0,0,0,0.15)]">
         
-        {/* Profile Avatar */}
         <Card className="border-none shadow-md mb-6">
           <CardContent className="p-6">
             <div className="flex items-center gap-4">
-              {/* Avatar com Gradiente Verde */}
-              <div className="w-20 h-20 rounded-full bg-gradient-to-br from-[#014726] to-[#059641] flex items-center justify-center">
-                <User className="w-10 h-10 text-white" />
+              
+              <div className="relative">
+                {profile?.photo_url ? (
+                  <img 
+                    src={profile.photo_url} 
+                    alt="Foto de Perfil" 
+                    className="w-20 h-20 rounded-full object-cover border-4 border-[#014726]/10"
+                  />
+                ) : (
+                  <div className="w-20 h-20 rounded-full bg-gradient-to-br from-[#014726] to-[#059641] flex items-center justify-center border-4 border-white shadow-sm">
+                    <User className="w-10 h-10 text-white" />
+                  </div>
+                )}
+
+                <button className="absolute bottom-0 right-0 p-1.5 bg-[#C6FF4A] rounded-full border-2 border-white shadow-sm hover:bg-yellow-300 transition-colors">
+                  <Camera className="w-3 h-3 text-[#014726]" />
+                </button>
               </div>
+
               <div className="flex-1">
                 <h2 className="text-[#2D3748] text-xl font-bold">
                   {profile?.full_name || user?.full_name}
@@ -101,7 +119,6 @@ export default function ProfilePage() {
         </Card>
 
         <div className="space-y-6">
-          {/* Profile Information */}
           <div>
             <h3 className="text-[#2D3748] font-bold mb-3 px-1">Informações Pessoais</h3>
             <Card className="border-none shadow-md">
@@ -115,7 +132,6 @@ export default function ProfilePage() {
                         index !== profileFields.length - 1 ? 'border-b border-slate-100' : ''
                       }`}
                     >
-                      {/* Ícones em Verde */}
                       <div className="p-2 rounded-lg bg-[#014726]/10 text-[#014726]">
                         <Icon className="w-5 h-5" />
                       </div>
@@ -135,7 +151,6 @@ export default function ProfilePage() {
             </Card>
           </div>
 
-          {/* Security Settings */}
           <div>
             <h3 className="text-[#2D3748] font-bold mb-3 px-1">Segurança</h3>
             <Card className="border-none shadow-md">
@@ -169,7 +184,6 @@ export default function ProfilePage() {
             </Card>
           </div>
 
-          {/* Notification Preferences */}
           <div>
             <h3 className="text-[#2D3748] font-bold mb-3 px-1">Notificações</h3>
             <Card className="border-none shadow-md">
@@ -179,7 +193,6 @@ export default function ProfilePage() {
                     <p className="text-[#2D3748] font-semibold text-sm">E-mail</p>
                     <p className="text-[#718096] text-xs">Receber notificações por e-mail</p>
                   </div>
-                  {/* Toggle Verde */}
                   <div className={`w-12 h-6 rounded-full transition-colors ${
                     profile?.email_notifications ? 'bg-[#014726]' : 'bg-slate-300'
                   } relative`}>
@@ -220,7 +233,6 @@ export default function ProfilePage() {
             </Card>
           </div>
 
-          {/* Botão de Salvar Verde Escuro */}
           <Button className="w-full !bg-[#014726] hover:!bg-[#026c35]" size="lg">
             Salvar Alterações
           </Button>
