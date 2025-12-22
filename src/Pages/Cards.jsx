@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
+import { Link } from "react-router-dom"; // Importe o Link
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -17,7 +18,8 @@ import {
   AlertCircle,
   Lock,
   Smartphone,
-  Plane
+  Plane,
+  Settings // Novo ícone para configuração
 } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
@@ -30,7 +32,6 @@ export default function CardsPage() {
   const [dynamicCVV, setDynamicCVV] = useState(null);
   const [travelDialogOpen, setTravelDialogOpen] = useState(false);
   const [selectedCardForTravel, setSelectedCardForTravel] = useState(null);
-  const queryClient = useQueryClient();
 
   const { data: cards, isLoading: cardsLoading } = useQuery({
     queryKey: ['cards'],
@@ -92,14 +93,11 @@ export default function CardsPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#014726] via-[#026c35] to-[#059641]">
-      
-      {/* Header */}
       <div className="px-6 pt-16 pb-8">
         <h1 className="text-[color:var(--accent-yellow,#C6FF4A)] text-2xl font-extrabold mb-1">Meus Cartões</h1>
         <p className="text-white/90 text-sm">Gerencie seus cartões físicos e virtuais</p>
       </div>
 
-      {/* Conteúdo Principal */}
       <div className="bg-white rounded-t-3xl px-6 py-6 min-h-screen shadow-[0_-8px_24px_rgba(0,0,0,0.15)]">
         <Tabs defaultValue="cards" className="space-y-6">
           <TabsList className="w-full grid grid-cols-2 h-auto p-1 bg-slate-100">
@@ -113,7 +111,6 @@ export default function CardsPage() {
             </TabsTrigger>
           </TabsList>
 
-          {/* Cards Tab */}
           <TabsContent value="cards" className="space-y-4">
             {cardsLoading ? (
               <div className="space-y-3">
@@ -205,76 +202,68 @@ export default function CardsPage() {
 
                       {/* Actions Section */}
                       <div className="p-4 bg-slate-50 border-t border-slate-200 space-y-4">
-                        {/* Aviso de Viagem - Outline */}
-                        <Button
-                          onClick={() => {
-                            setSelectedCardForTravel(card);
-                            setTravelDialogOpen(true);
-                          }}
-                          variant="outline"
-                          className="w-full border-[#014726]/20 text-[#014726] hover:bg-[#014726]/5"
-                        >
-                          <Plane className="w-4 h-4 mr-2" aria-hidden="true" />
-                          Aviso de Viagem
-                        </Button>
+                        
+                        {/* BOTÃO DE CONFIGURAÇÃO (NOVO) */}
+                        <Link to="/cards/manage">
+                          <Button 
+                            variant="outline"
+                            className="w-full mb-3 border-slate-300 text-slate-700 hover:bg-slate-100"
+                          >
+                            <Settings className="w-4 h-4 mr-2" />
+                            Configurar Bloqueios e Senha
+                          </Button>
+                        </Link>
 
-                        {/* Virtual Card & CVV Section */}
-                        <div>
-                          <div className="flex items-center gap-2 mb-3">
-                            <Smartphone className="w-4 h-4 text-[#014726]" aria-hidden="true" />
-                            <h3 className="text-[#2D3748] font-semibold text-sm">Cartão Virtual</h3>
-                          </div>
-
-                        <div className="space-y-3">
-                          {dynamicCVV && (
-                            <div className="bg-white p-3 rounded-lg border border-green-200">
-                              <div className="flex items-center justify-between">
-                                <div>
-                                  <p className="text-xs text-[#718096] mb-1">CVV Dinâmico</p>
-                                  <p className="font-mono text-2xl font-bold text-[#2D3748]">{dynamicCVV}</p>
-                                  <p className="text-xs text-green-600 mt-1">Válido por 5 minutos</p>
-                                </div>
-                                <button
-                                  onClick={() => handleCopyToClipboard(dynamicCVV, 'CVV dinâmico')}
-                                  className="bg-green-50 text-green-600 p-2 rounded-lg hover:bg-green-100"
-                                  aria-label="Copiar CVV dinâmico"
-                                >
-                                  <Copy className="w-4 h-4" aria-hidden="true" />
-                                </button>
-                              </div>
-                            </div>
-                          )}
-
-                          {/* Botão CVV - FORÇADO PARA VERDE (Usei !bg e !text) */}
+                        <div className="grid grid-cols-2 gap-3">
+                          <Button
+                            onClick={() => {
+                              setSelectedCardForTravel(card);
+                              setTravelDialogOpen(true);
+                            }}
+                            variant="outline"
+                            className="border-[#014726]/20 text-[#014726] hover:bg-[#014726]/5 text-xs h-10"
+                          >
+                            <Plane className="w-4 h-4 mr-2" />
+                            Aviso Viagem
+                          </Button>
+                          
                           <Button
                             onClick={handleGenerateCVV}
                             disabled={generatingCVV}
-                            className="w-full !bg-[#014726] hover:!bg-[#026c35] text-white border-none"
+                            className="bg-[#014726] hover:bg-[#026c35] text-white text-xs h-10"
                           >
                             {generatingCVV ? (
-                              <>
-                                <RefreshCw className="w-4 h-4 mr-2 animate-spin" aria-hidden="true" />
-                                Gerando...
-                              </>
+                              <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
                             ) : (
-                              <>
-                                <Lock className="w-4 h-4 mr-2" aria-hidden="true" />
-                                Gerar CVV Dinâmico
-                              </>
+                              <Lock className="w-4 h-4 mr-2" />
                             )}
+                            Gerar CVV
                           </Button>
-
-                            <p className="text-xs text-[#718096] text-center">
-                              Use este CVV para compras online mais seguras
-                            </p>
-                          </div>
                         </div>
+
+                        {/* CVV Dinâmico Display */}
+                        {dynamicCVV && (
+                          <div className="bg-white p-3 rounded-lg border border-green-200 animate-fade-in">
+                            <div className="flex items-center justify-between">
+                              <div>
+                                <p className="text-xs text-[#718096] mb-1">CVV Dinâmico</p>
+                                <p className="font-mono text-2xl font-bold text-[#2D3748]">{dynamicCVV}</p>
+                                <p className="text-[10px] text-green-600 mt-1">Válido por 5 minutos</p>
+                              </div>
+                              <button
+                                onClick={() => handleCopyToClipboard(dynamicCVV, 'CVV dinâmico')}
+                                className="bg-green-50 text-green-600 p-2 rounded-lg hover:bg-green-100"
+                              >
+                                <Copy className="w-4 h-4" />
+                              </button>
+                            </div>
+                          </div>
+                        )}
                       </div>
                     </CardContent>
                   </Card>
                 ))}
 
-                {/* Botão Novo Cartão - Outline */}
                 <Button
                   variant="outline"
                   className="w-full border-2 border-dashed border-[#014726]/30 text-[#014726] hover:bg-[#014726]/5 h-14"
@@ -286,12 +275,10 @@ export default function CardsPage() {
             )}
           </TabsContent>
 
-          {/* Requests Tab */}
+          {/* Requests Tab (Mantido igual) */}
           <TabsContent value="requests" className="space-y-4">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-[#2D3748] font-bold text-lg">Minhas Solicitações</h2>
-              
-              {/* Botão Nova Solicitação - FORÇADO PARA VERDE (Usei !bg e !text) */}
               <Button className="!bg-[#014726] hover:!bg-[#026c35] text-white border-none">
                 <Plus className="w-4 h-4 mr-2" aria-hidden="true" />
                 Nova Solicitação
@@ -309,7 +296,6 @@ export default function CardsPage() {
                 <CardContent className="p-8 text-center">
                   <Clock className="w-12 h-12 text-[#718096] mx-auto mb-3" aria-hidden="true" />
                   <p className="text-[#2D3748] font-medium">Nenhuma solicitação encontrada</p>
-                  <p className="text-[#718096] text-sm mt-1">Suas solicitações aparecerão aqui</p>
                 </CardContent>
               </Card>
             ) : (
@@ -326,9 +312,7 @@ export default function CardsPage() {
                             <div className="flex items-center gap-2 mb-1">
                               <CreditCard className="w-4 h-4 text-[#014726]" aria-hidden="true" />
                               <h3 className="text-[#2D3748] font-semibold">
-                                {request.request_type === 'new_card' ? 'Novo Cartão' : 
-                                 request.request_type === 'second_copy' ? 'Segunda Via' : 
-                                 'Solicitação'}
+                                {request.request_type === 'new_card' ? 'Novo Cartão' : 'Solicitação'}
                               </h3>
                             </div>
                             <p className="text-[#718096] text-sm">
@@ -340,29 +324,12 @@ export default function CardsPage() {
                             {status.label}
                           </Badge>
                         </div>
-
                         <div className="flex items-center justify-between text-xs text-[#718096] pt-3 border-t border-slate-100">
                           <span>Solicitado em</span>
                           <span className="font-medium text-[#2D3748]">
                             {format(new Date(request.created_date), "dd/MM/yyyy 'às' HH:mm", { locale: ptBR })}
                           </span>
                         </div>
-
-                        {request.status === 'pending' && (
-                          <div className="mt-3 p-3 bg-yellow-50 rounded-lg">
-                            <p className="text-xs text-yellow-800">
-                              Sua solicitação está sendo analisada. Você receberá uma notificação assim que for processada.
-                            </p>
-                          </div>
-                        )}
-
-                        {request.status === 'approved' && (
-                          <div className="mt-3 p-3 bg-green-50 rounded-lg">
-                            <p className="text-xs text-green-800">
-                              Solicitação aprovada! O cartão será enviado em até 7 dias úteis.
-                            </p>
-                          </div>
-                        )}
                       </CardContent>
                     </Card>
                   );

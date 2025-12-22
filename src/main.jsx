@@ -28,6 +28,9 @@ import HelpCenter from './Pages/HelpCenter.jsx'
 import FAQ from './Pages/FAQ.jsx'
 import Terms from './Pages/Terms.jsx'
 import AboutApp from './Pages/AboutApp.jsx'
+import DigitalWallets from './Pages/DigitalWallets.jsx'
+import Subscriptions from './Pages/Subscriptions.jsx'
+import InvoiceDetails from './Pages/InvoiceDetails.jsx'
 
 import './index.css' 
 
@@ -65,6 +68,12 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           <Route path="/faq" element={<FAQ />} />
           <Route path="/terms" element={<Terms />} />
           <Route path="/about" element={<AboutApp />} />
+          <Route path="/invoicemanagement" element={<InvoiceManagement />} />
+          <Route path="/invoices/manage" element={<InvoiceManagement />} /> 
+          <Route path="/digitalwallets" element={<DigitalWallets />} />
+          <Route path="/subscriptions" element={<Subscriptions />} />
+          <Route path="/cards/manage" element={<CardManagement />} />
+          <Route path="/invoice-details" element={<InvoiceDetails />} />
 
           {/* Rota coringa (404 simples) */}
           <Route path="*" element={<Home />} />
